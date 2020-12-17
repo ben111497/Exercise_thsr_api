@@ -10,7 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.lab12.R
 
 class StationAdapter(context: Context, list: ArrayList<String>, private val listAddress: ArrayList<String>):
-    ArrayAdapter<String>(context, R.layout.adpater_station, list) {
+    ArrayAdapter<String>(context, R.layout.adapter_stationlist, list) {
 
     private class ViewHolder(v: View) {
         val tv_station: TextView = v.findViewById(R.id.tv_station)
@@ -32,7 +32,7 @@ class StationAdapter(context: Context, list: ArrayList<String>, private val list
         val holder: ViewHolder
 
         if(convertView == null){
-            view = View.inflate(context, R.layout.adpater_station, null)
+            view = View.inflate(context, R.layout.adapter_stationlist, null)
             holder = ViewHolder(view)
             view.tag = holder
         } else {

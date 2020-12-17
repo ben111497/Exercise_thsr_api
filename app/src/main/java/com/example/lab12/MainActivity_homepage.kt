@@ -250,6 +250,7 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true).let {
                 val tv_stationName = it?.findViewById<EditText>(R.id.ed_stationName)
                 val listView = it?.findViewById<ListView>(R.id.listView)
+
             }
         }
         end.setOnClickListener {
