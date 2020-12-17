@@ -8,13 +8,11 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.PopupMenu
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.lab12.fragment.TestFragment
+import com.example.lab12.manager.DialogManager
 import com.example.lab12.tools.Method
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
@@ -26,6 +24,10 @@ import kotlinx.android.synthetic.main.activity_main_homepage.*
 class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickListener {
     private var x_init=23.583234
     private var y_init=120.5825975
+
+    private var startStation = ""
+    private var endStation = ""
+
     private lateinit var dbrw : SQLiteDatabase
     private var items : ArrayList<String> = ArrayList(0)
     private lateinit var adapter : ArrayAdapter<String>
@@ -44,6 +46,27 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
             map.getMapAsync(this)
         }
         setTitle("老鐵發車")
+
+        val c = dbrw.rawQuery("SELECT * FROM myTable", null)
+        c.moveToFirst()
+        val stationName = ArrayList<String>()
+        val stationAddress = ArrayList<String>()
+        items.clear()
+        for (i in 0 until c.count) {
+            stationName.add(c.getString(0))
+            stationAddress.add(c.getString(3))
+            c.moveToNext()
+        }
+        //設定起始站終點站spinner
+//        val adapter = StationAdapter(this, stationName, stationAddress)
+//        spinner.adapter = adapter
+//        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(p0: AdapterVSiew<*>?, v: View?, p: Int, id: Long) {
+//                startStation = stationName[p]
+//            }
+//            override fun onNothingSelected(p0: AdapterView<*>?) {}
+//        }
+
         //交換終點起點
         change.setOnClickListener {
             var change_item1 = start.text
@@ -77,27 +100,19 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
                     ).show()
                 }
                 else {
-                    val c = dbrw.rawQuery("SELECT * FROM myTable", null)
-                    c.moveToFirst()
-                    val station_name = arrayOfNulls<String>(c.count)
-                    items.clear()
-                    for (i in 0 until c.count) {
-                        station_name[i] = c.getString(0)
-                        c.moveToNext()
-                    }
-                    if (start.text.toString() == station_name[0] || start.text.toString() == station_name[1]
-                        || start.text.toString() == station_name[2] || start.text.toString() == station_name[3]
-                        || start.text.toString() == station_name[4] || start.text.toString() == station_name[5]
-                        || start.text.toString() == station_name[6] || start.text.toString() == station_name[7]
-                        || start.text.toString() == station_name[8] || start.text.toString() == station_name[9]
-                        || start.text.toString() == station_name[10] || start.text.toString() == station_name[11]
+                    if (start.text.toString() == stationName[0] || start.text.toString() == stationName[1]
+                        || start.text.toString() == stationName[2] || start.text.toString() == stationName[3]
+                        || start.text.toString() == stationName[4] || start.text.toString() == stationName[5]
+                        || start.text.toString() == stationName[6] || start.text.toString() == stationName[7]
+                        || start.text.toString() == stationName[8] || start.text.toString() == stationName[9]
+                        || start.text.toString() == stationName[10] || start.text.toString() == stationName[11]
                     ) {
-                        if (end.text.toString() == station_name[0] || end.text.toString() == station_name[1]
-                            || end.text.toString() == station_name[2] || end.text.toString() == station_name[3]
-                            || end.text.toString() == station_name[4] || end.text.toString() == station_name[5]
-                            || end.text.toString() == station_name[6] || end.text.toString() == station_name[7]
-                            || end.text.toString() == station_name[8] || end.text.toString() == station_name[9]
-                            || end.text.toString() == station_name[10] || end.text.toString() == station_name[11]
+                        if (end.text.toString() == stationName[0] || end.text.toString() == stationName[1]
+                            || end.text.toString() == stationName[2] || end.text.toString() == stationName[3]
+                            || end.text.toString() == stationName[4] || end.text.toString() == stationName[5]
+                            || end.text.toString() == stationName[6] || end.text.toString() == stationName[7]
+                            || end.text.toString() == stationName[8] || end.text.toString() == stationName[9]
+                            || end.text.toString() == stationName[10] || end.text.toString() == stationName[11]
                         ) {
                             val bundle = Bundle()
                             val i = Intent(this, MainActivity3::class.java)
@@ -231,7 +246,15 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
     }
 //==========================================================================================
     private fun setListener() {
+        start.setOnClickListener {
+            DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true).let {
+                val tv_stationName = it?.findViewById<EditText>(R.id.ed_stationName)
+                val listView = it?.findViewById<ListView>(R.id.listView)
+            }
+        }
+        end.setOnClickListener {
 
+        }
     }
 
 }

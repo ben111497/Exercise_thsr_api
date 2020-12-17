@@ -46,27 +46,26 @@ tools:context=".MainActivity_homepage">
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:orientation="vertical"
+    android:gravity="center"
     app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
     app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
     app:layout_constraintStart_toEndOf="@+id/linearLayout"
     app:layout_constraintTop_toTopOf="@+id/linearLayout"
-    app:layout_constraintVertical_bias="0.51">
+    app:layout_constraintVertical_bias="0.5">
 
-    <EditText
+    <TextView
         android:id="@+id/start"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="起始站點"
-        android:inputType="textPersonName" />
+        android:text="起始站點" />
 
-    <EditText
+    <TextView
         android:id="@+id/end"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="終點站點"
-        android:inputType="textPersonName" />
+        android:text="終點站點" />
 
 </LinearLayout>
 
