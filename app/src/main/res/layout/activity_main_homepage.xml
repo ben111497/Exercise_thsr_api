@@ -67,6 +67,7 @@ tools:context=".MainActivity_homepage">
         android:ems="10"
         android:hint="終點站點"
         android:inputType="textPersonName" />
+
 </LinearLayout>
 
 <fragment
@@ -135,5 +136,14 @@ tools:context=".MainActivity_homepage">
         android:text="路線規劃搜尋" />
 
 </LinearLayout>
-
+    <FrameLayout
+        android:id="@+id/fl_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

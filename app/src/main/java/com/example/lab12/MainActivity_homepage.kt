@@ -1,14 +1,9 @@
 package com.example.lab12
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
@@ -19,6 +14,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.lab12.fragment.TestFragment
+import com.example.lab12.tools.Method
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.model.LatLng
@@ -26,9 +23,9 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_main_homepage.*
 
-class MainActivity_homepage : AppCompatActivity() ,OnMapReadyCallback,OnMarkerClickListener {
-    var x_init=23.583234
-    var y_init=120.5825975
+class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickListener {
+    private var x_init=23.583234
+    private var y_init=120.5825975
     private lateinit var dbrw : SQLiteDatabase
     private var items : ArrayList<String> = ArrayList(0)
     private lateinit var adapter : ArrayAdapter<String>
@@ -39,26 +36,21 @@ class MainActivity_homepage : AppCompatActivity() ,OnMapReadyCallback,OnMarkerCl
         setContentView(R.layout.activity_main_homepage)
         dbrw = MyDBHelper(this).writableDatabase
         //取得資料庫實體
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        )
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_PERMISSIONS
-            )
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_PERMISSIONS)
         else {
             val map = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
             map.getMapAsync(this)
         }
+        setTitle("老鐵發車")
         //交換終點起點
         change.setOnClickListener {
             var change_item1 = start.text
             var change_item2 = end.text
             start.setText(change_item2)
             end.setText(change_item1)
+            Method.switchTo(this, TestFragment())
         }
         //搜尋站點
         station_search.setOnClickListener {
@@ -238,5 +230,8 @@ class MainActivity_homepage : AppCompatActivity() ,OnMapReadyCallback,OnMarkerCl
         }
     }
 //==========================================================================================
+    private fun setListener() {
+
+    }
 
 }
