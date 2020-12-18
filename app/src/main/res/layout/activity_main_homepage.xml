@@ -62,32 +62,36 @@
             app:layout_constraintTop_toTopOf="@+id/start"
             app:srcCompat="@drawable/change1" />
 
-        <Button
+        <TextView
             android:id="@+id/station_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:background="@android:color/holo_green_light"
+            android:gravity="center"
+            android:padding="10dp"
+            android:background="@drawable/bg_bluegreen"
             android:text="站點搜尋"
+            android:textColor="@color/black"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/station_plan"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/end"
             app:layout_constraintTop_toBottomOf="@+id/end" />
 
-        <Button
-            android:id="@+id/station_plan"
+        <TextView
+            android:id="@+id/station_plan"iok mn
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:background="@android:color/holo_green_light"
+            android:background="@drawable/bg_bluegreen"
             android:text="路線規劃搜尋"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/station_search"
             app:layout_constraintTop_toTopOf="@+id/station_search" />
     </androidx.constraintlayout.widget.ConstraintLayout>

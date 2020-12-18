@@ -6,5 +6,5 @@
             android:bottomLeftRadius="20dp"
             android:bottomRightRadius="20dp"/> <!--上面左圆角的半径-->
 
-    <solid android:color="@color/orange_primary"/>
+    <solid android:color="@color/test_orange"/>
 </shape>
