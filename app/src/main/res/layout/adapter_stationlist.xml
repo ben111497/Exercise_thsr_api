@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_station"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -14,7 +15,7 @@
         android:layout_marginTop="8dp"
         android:text="台中車站"
         android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,7 +27,7 @@
         android:layout_marginBottom="8dp"
         android:text="台中市xx區..."
         android:textColor="@color/test_orange_dark"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.example.lab12.adapter.StationListAdapter
 import com.example.lab12.fragment.TestFragment
 import com.example.lab12.manager.DialogManager
 import com.example.lab12.tools.Method
@@ -25,8 +26,8 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
     private var x_init=23.583234
     private var y_init=120.5825975
 
-    private var startStation = ""
-    private var endStation = ""
+    val stationName = ArrayList<String>()
+    val stationAddress = ArrayList<String>()
 
     private lateinit var dbrw : SQLiteDatabase
     private var items : ArrayList<String> = ArrayList(0)
@@ -46,11 +47,10 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
             map.getMapAsync(this)
         }
         setTitle("老鐵發車")
+        setListener()
 
         val c = dbrw.rawQuery("SELECT * FROM myTable", null)
         c.moveToFirst()
-        val stationName = ArrayList<String>()
-        val stationAddress = ArrayList<String>()
         items.clear()
         for (i in 0 until c.count) {
             stationName.add(c.getString(0))
@@ -84,7 +84,9 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
         }
         //時刻表規劃路線規劃
         station_plan.setOnClickListener{
-            if(start.length()<1 || end.length()<1){
+            val startStation = start.text.toString().replace("車站", "")
+            val endStation = end.text.toString().replace("車站", "")
+            if(startStation.isEmpty() || endStation.isEmpty()){
                 Toast.makeText(
                     this,
                     "起始站點或終點站點未輸入!",
@@ -92,7 +94,7 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
                 ).show()
             }
             else{
-                if(start.text.toString()==end.text.toString()){
+                if(startStation.contains(endStation)){
                     Toast.makeText(
                         this,
                         "終點站和起點站輸入相同!\n請更改!",
@@ -100,32 +102,12 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
                     ).show()
                 }
                 else {
-                    if (start.text.toString() == stationName[0] || start.text.toString() == stationName[1]
-                        || start.text.toString() == stationName[2] || start.text.toString() == stationName[3]
-                        || start.text.toString() == stationName[4] || start.text.toString() == stationName[5]
-                        || start.text.toString() == stationName[6] || start.text.toString() == stationName[7]
-                        || start.text.toString() == stationName[8] || start.text.toString() == stationName[9]
-                        || start.text.toString() == stationName[10] || start.text.toString() == stationName[11]
-                    ) {
-                        if (end.text.toString() == stationName[0] || end.text.toString() == stationName[1]
-                            || end.text.toString() == stationName[2] || end.text.toString() == stationName[3]
-                            || end.text.toString() == stationName[4] || end.text.toString() == stationName[5]
-                            || end.text.toString() == stationName[6] || end.text.toString() == stationName[7]
-                            || end.text.toString() == stationName[8] || end.text.toString() == stationName[9]
-                            || end.text.toString() == stationName[10] || end.text.toString() == stationName[11]
-                        ) {
-                            val bundle = Bundle()
-                            val i = Intent(this, MainActivity3::class.java)
-                            bundle.putString("station_start", start.text.toString())
-                            bundle.putString("station_end", end.text.toString())
-                            i.putExtras(bundle)  //此無資料
-                            startActivityForResult(i, 2)
-                        } else {
-                            Toast.makeText(this, "輸入錯誤或站名不存在!!", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(this, "輸入錯誤或站名不存在!!", Toast.LENGTH_SHORT).show()
-                    }
+                    val bundle = Bundle()
+                    val i = Intent(this, MainActivity3::class.java)
+                    bundle.putString("station_start", startStation)
+                    bundle.putString("station_end", endStation)
+                    i.putExtras(bundle)
+                    startActivityForResult(i, 2)
                 }
             }
         }
@@ -250,11 +232,30 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true).let {
                 val tv_stationName = it?.findViewById<EditText>(R.id.ed_stationName)
                 val listView = it?.findViewById<ListView>(R.id.listView)
-
+                val adapter = StationListAdapter(this, stationName, stationAddress, object: StationListAdapter.MsgListener{
+                    override fun onClick(position: Int) {
+                        start.text = "${stationName[position]}車站"
+                        DialogManager.instance.cancelDialog()
+                    }
+                })
+                listView?.adapter = adapter
+                adapter.notifyDataSetChanged()
             }
         }
-        end.setOnClickListener {
 
+        end.setOnClickListener {
+            DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true).let {
+                val tv_stationName = it?.findViewById<EditText>(R.id.ed_stationName)
+                val listView = it?.findViewById<ListView>(R.id.listView)
+                val adapter2 = StationListAdapter(this, stationName, stationAddress, object: StationListAdapter.MsgListener{
+                    override fun onClick(position: Int) {
+                        end.text = "${stationName[position]}車站"
+                        DialogManager.instance.cancelDialog()
+                    }
+                })
+                listView?.adapter = adapter2
+                adapter2.notifyDataSetChanged()
+            }
         }
     }
 
