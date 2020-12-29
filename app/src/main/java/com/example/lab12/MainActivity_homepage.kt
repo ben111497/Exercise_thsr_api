@@ -6,11 +6,15 @@ import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.widget.addTextChangedListener
 import com.example.lab12.adapter.StationListAdapter
 import com.example.lab12.fragment.TestFragment
 import com.example.lab12.manager.DialogManager
@@ -26,8 +30,11 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
     private var x_init=23.583234
     private var y_init=120.5825975
 
-    val stationName = ArrayList<String>()
-    val stationAddress = ArrayList<String>()
+    private lateinit var adapterStation: StationListAdapter
+    private lateinit var adapterStation2: StationListAdapter
+
+    private val stationName = ArrayList<String>()
+    private val stationAddress = ArrayList<String>()
 
     private lateinit var dbrw : SQLiteDatabase
     private var items : ArrayList<String> = ArrayList(0)
@@ -229,32 +236,54 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
 //==========================================================================================
     private fun setListener() {
         start.setOnClickListener {
-            DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true).let {
-                val tv_stationName = it?.findViewById<EditText>(R.id.ed_stationName)
-                val listView = it?.findViewById<ListView>(R.id.listView)
-                val adapter = StationListAdapter(this, stationName, stationAddress, object: StationListAdapter.MsgListener{
+            DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
+                val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
+                val listView = it.findViewById<ListView>(R.id.listView)
+                adapterStation = StationListAdapter(this, stationName, stationAddress, object: StationListAdapter.MsgListener{
                     override fun onClick(position: Int) {
                         start.text = "${stationName[position]}車站"
                         DialogManager.instance.cancelDialog()
                     }
                 })
-                listView?.adapter = adapter
-                adapter.notifyDataSetChanged()
+                listView?.adapter = adapterStation
+                adapterStation.notifyDataSetChanged()
+
+                ed_stationName.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(p0: Editable?) { }
+
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                        adapterStation.index = p0.toString()
+                        adapterStation.notifyDataSetChanged()
+                    }
+                })
             }
         }
 
         end.setOnClickListener {
-            DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true).let {
-                val tv_stationName = it?.findViewById<EditText>(R.id.ed_stationName)
-                val listView = it?.findViewById<ListView>(R.id.listView)
-                val adapter2 = StationListAdapter(this, stationName, stationAddress, object: StationListAdapter.MsgListener{
+            DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
+                val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
+                val listView = it.findViewById<ListView>(R.id.listView)
+                adapterStation2 = StationListAdapter(this, stationName, stationAddress, object: StationListAdapter.MsgListener{
                     override fun onClick(position: Int) {
                         end.text = "${stationName[position]}車站"
                         DialogManager.instance.cancelDialog()
                     }
                 })
-                listView?.adapter = adapter2
-                adapter2.notifyDataSetChanged()
+                listView?.adapter = adapterStation2
+                adapterStation2.notifyDataSetChanged()
+
+                ed_stationName.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(p0: Editable?) { }
+
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                        adapterStation2.index = p0.toString()
+                        adapterStation2.notifyDataSetChanged()
+                    }
+                })
             }
         }
     }
