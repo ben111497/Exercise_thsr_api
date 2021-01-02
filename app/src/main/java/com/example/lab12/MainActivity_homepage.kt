@@ -1,6 +1,7 @@
 package com.example.lab12
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
@@ -27,8 +28,8 @@ import kotlinx.android.synthetic.main.activity_main_homepage.*
 
 class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickListener {
     class Station(val name: String, val address: String, val positionLat: String, val positionLon: String)
-    private var x_init=23.583234
-    private var y_init=120.5825975
+    private var x_init = 23.583234
+    private var y_init = 120.5825975
 
     private lateinit var adapterStation: StationSearchAdapter
     private lateinit var adapterStation2: StationSearchAdapter
@@ -147,9 +148,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
             x_init = it.latitude
             y_init = it.longitude
         }
-        val map = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        map.getMapAsync(this)
-        showPopup(map.view!!)   //menu
+        showListDialog()
         return false
     }
 
@@ -286,6 +285,27 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
                 })
             }
         }
+    }
+
+    private fun showListDialog() {
+        val data = arrayOf("設定成起點", "設定成終點", "附近餐廳", "取消")
+        DialogManager.instance.showList(this, data)
+            ?.setOnItemClickListener { parent, view, p, id ->
+                DialogManager.instance.cancelDialog()
+                when (p) {
+                    0 -> originData.find { it.positionLat == x_init.toString() || it.positionLon == y_init.toString() }?.name?.let { start.text = "${it}車站" }
+                    1 -> originData.find { it.positionLat == x_init.toString() || it.positionLon == y_init.toString() }?.name?.let { end.text = "${it}車站" }
+                    2 -> {
+                        val bundle2 = Bundle()
+                        val i = Intent(this, MainActivity5::class.java)
+                        bundle2.putDouble("lat", x_init)
+                        bundle2.putDouble("lng", y_init)
+                        i.putExtras(bundle2)
+                        startActivityForResult(i, 3)
+                    }
+                    3 -> DialogManager.instance.dismissAll()
+                }
+            }
     }
 
 }
