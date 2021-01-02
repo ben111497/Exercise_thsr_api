@@ -7,23 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
-import android.view.View
-import android.widget.*
-import androidx.core.view.get
-import com.example.lab12.adapter.StationListAdapter
 import com.example.lab12.adapter.StationSearchAdapter
-import com.example.lab12.manager.DialogManager
 import kotlinx.android.synthetic.main.activity_main2.*
-import kotlinx.android.synthetic.main.activity_main_homepage.*
-import androidx.core.widget.addTextChangedListener as addTextChangedListener1
 
 class MainActivity2 : AppCompatActivity() {
-    class Station(val name: String, val address: String, val positionLat: String, val positionLon: String)
-
     private lateinit var dbrw : SQLiteDatabase
-    private var items = ArrayList<Station>()
-    private var originData = ArrayList<Station>()
+    private var items = ArrayList<MainActivity_homepage.Station>()
+    private var originData = ArrayList<MainActivity_homepage.Station>()
 
     private lateinit var adapter : StationSearchAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +22,7 @@ class MainActivity2 : AppCompatActivity() {
         dbrw=MyDBHelper(this).writableDatabase
         //取得資料庫實體
 
-        adapter = StationSearchAdapter(this, items, object: StationListAdapter.MsgListener{
+        adapter = StationSearchAdapter(this, items, object: StationSearchAdapter.MsgListener{
             override fun onClick(position: Int) {
                 val bundle = Bundle()
                 bundle.putString("PositionLat", items[position].positionLat)
@@ -50,7 +40,7 @@ class MainActivity2 : AppCompatActivity() {
         c.moveToFirst()
         items.clear()
         for(i in 0 until c.count){
-            originData.add(Station(c.getString(0),  c.getString(3), c.getString(1), c.getString(2)))
+            originData.add(MainActivity_homepage.Station(c.getString(0),  c.getString(3), c.getString(1), c.getString(2)))
             c.moveToNext()
         }
         items.addAll(originData)
@@ -65,7 +55,12 @@ class MainActivity2 : AppCompatActivity() {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 items.clear()
-                items.addAll(originData.filter { it.name.contains(p0.toString()) || it.address.contains(p0.toString()) })
+
+                if (name.text.isEmpty())
+                    items.addAll(originData)
+                else
+                    items.addAll(originData.filter { it.name.contains(p0.toString()) || it.address.contains(p0.toString()) })
+
                 adapter.notifyDataSetChanged()
             }
         })

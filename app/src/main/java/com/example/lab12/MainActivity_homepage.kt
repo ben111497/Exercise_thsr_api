@@ -8,14 +8,12 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.widget.addTextChangedListener
-import com.example.lab12.adapter.StationListAdapter
+import com.example.lab12.adapter.StationSearchAdapter
 import com.example.lab12.fragment.TestFragment
 import com.example.lab12.manager.DialogManager
 import com.example.lab12.tools.Method
@@ -24,21 +22,23 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.activity_main_homepage.*
 
-class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickListener {
+class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickListener {
+    class Station(val name: String, val address: String, val positionLat: String, val positionLon: String)
     private var x_init=23.583234
     private var y_init=120.5825975
 
-    private lateinit var adapterStation: StationListAdapter
-    private lateinit var adapterStation2: StationListAdapter
+    private lateinit var adapterStation: StationSearchAdapter
+    private lateinit var adapterStation2: StationSearchAdapter
 
     private val stationName = ArrayList<String>()
     private val stationAddress = ArrayList<String>()
 
     private lateinit var dbrw : SQLiteDatabase
-    private var items : ArrayList<String> = ArrayList(0)
-    private lateinit var adapter : ArrayAdapter<String>
+    private var items = ArrayList<Station>()
+    private var originData = ArrayList<Station>()
     private lateinit var map:GoogleMap
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,28 +56,20 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
         setTitle("老鐵發車")
         setListener()
 
-        val c = dbrw.rawQuery("SELECT * FROM myTable", null)
+        val c = dbrw.rawQuery( "SELECT * FROM myTable",null)
         c.moveToFirst()
         items.clear()
-        for (i in 0 until c.count) {
-            stationName.add(c.getString(0))
-            stationAddress.add(c.getString(3))
+        for(i in 0 until c.count){
+            originData.add(Station(c.getString(0), c.getString(3), c.getString(1), c.getString(2)))
             c.moveToNext()
         }
-        //設定起始站終點站spinner
-//        val adapter = StationAdapter(this, stationName, stationAddress)
-//        spinner.adapter = adapter
-//        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(p0: AdapterVSiew<*>?, v: View?, p: Int, id: Long) {
-//                startStation = stationName[p]
-//            }
-//            override fun onNothingSelected(p0: AdapterView<*>?) {}
-//        }
+        items.addAll(originData)
+        c.close()
 
         //交換終點起點
         change.setOnClickListener {
-            var change_item1 = start.text
-            var change_item2 = end.text
+            val change_item1 = start.text
+            val change_item2 = end.text
             start.setText(change_item2)
             end.setText(change_item1)
             Method.switchTo(this, TestFragment())
@@ -93,21 +85,11 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
         station_plan.setOnClickListener{
             val startStation = start.text.toString().replace("車站", "")
             val endStation = end.text.toString().replace("車站", "")
-            if(startStation.isEmpty() || endStation.isEmpty()){
-                Toast.makeText(
-                    this,
-                    "起始站點或終點站點未輸入!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            else{
-                if(startStation.contains(endStation)){
-                    Toast.makeText(
-                        this,
-                        "終點站和起點站輸入相同!\n請更改!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            if (startStation.isEmpty() || endStation.isEmpty())
+                Toast.makeText(this, "起始站點或終點站點未輸入!", Toast.LENGTH_SHORT).show()
+            else {
+                if(startStation.contains(endStation))
+                    Toast.makeText(this, "終點站和起點站輸入相同!\n請更改!", Toast.LENGTH_SHORT).show()
                 else {
                     val bundle = Bundle()
                     val i = Intent(this, MainActivity3::class.java)
@@ -160,9 +142,11 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
     }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
-        var latLng: com.google.android.gms.maps.model.LatLng? =p0?.getPosition()
-        x_init=latLng!!.latitude
-        y_init=latLng!!.longitude
+        val latLng = p0?.position
+        latLng?.let {
+            x_init = it.latitude
+            y_init = it.longitude
+        }
         val map = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         map.getMapAsync(this)
         showPopup(map.view!!)   //menu
@@ -181,7 +165,7 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
                     for(i in 0 until c.count){
                         if(String.format("%.2f",c.getString(1).toDouble())==String.format("%.2f",x_init)
                             && String.format("%.2f",c.getString(2).toDouble())==String.format("%.2f",y_init)){
-                            start.setText("${c.getString(0)}")
+                            start.text = "${c.getString(0)}"
                         }
                         c.moveToNext()
                     }
@@ -192,7 +176,7 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
                     for(i in 0 until c.count){
                         if(String.format("%.2f",c.getString(1).toDouble())==String.format("%.2f",x_init)
                             && String.format("%.2f",c.getString(2).toDouble())==String.format("%.2f",y_init)){
-                            end.setText("${c.getString(0)}")
+                            end.text = "${c.getString(0)}"
                         }
                         c.moveToNext()
                     }
@@ -221,7 +205,7 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
             if(requestCode==1 && resultCode== Activity.RESULT_OK) {//畫面2回傳
                 x_init = it.getString("PositionLat").toDouble()
                 y_init = it.getString("PositionLon").toDouble()
-                var latLng=LatLng(x_init,y_init)
+                val latLng = LatLng(x_init, y_init)
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
             }
 
@@ -239,12 +223,14 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
                 val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
                 val listView = it.findViewById<ListView>(R.id.listView)
-                adapterStation = StationListAdapter(this, stationName, stationAddress, object: StationListAdapter.MsgListener{
+                adapterStation = StationSearchAdapter(this, items, object: StationSearchAdapter.MsgListener {
                     override fun onClick(position: Int) {
-                        start.text = "${stationName[position]}車站"
+                        start.text = "${items[position].name}車站"
                         DialogManager.instance.cancelDialog()
                     }
                 })
+                items.clear()
+                items.addAll(originData)
                 listView?.adapter = adapterStation
                 adapterStation.notifyDataSetChanged()
 
@@ -254,7 +240,13 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        adapterStation.index = p0.toString()
+                        items.clear()
+
+                        if (ed_stationName.text.isEmpty())
+                            items.addAll(originData)
+                        else
+                            items.addAll(originData.filter { it.name.contains(p0.toString()) || it.address.contains(p0.toString()) })
+
                         adapterStation.notifyDataSetChanged()
                     }
                 })
@@ -265,12 +257,14 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
                 val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
                 val listView = it.findViewById<ListView>(R.id.listView)
-                adapterStation2 = StationListAdapter(this, stationName, stationAddress, object: StationListAdapter.MsgListener{
-                    override fun onClick(position: Int) {
-                        end.text = "${stationName[position]}車站"
-                        DialogManager.instance.cancelDialog()
-                    }
-                })
+                adapterStation2 = StationSearchAdapter(this, items, object: StationSearchAdapter.MsgListener{
+                override fun onClick(position: Int) {
+                    end.text = "${items[position].name}車站"
+                    DialogManager.instance.cancelDialog()
+                }
+            })
+                items.clear()
+                items.addAll(originData)
                 listView?.adapter = adapterStation2
                 adapterStation2.notifyDataSetChanged()
 
@@ -280,7 +274,13 @@ class MainActivity_homepage : BaseActivity() ,OnMapReadyCallback,OnMarkerClickLi
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        adapterStation2.index = p0.toString()
+                        items.clear()
+
+                        if (ed_stationName.text.isEmpty())
+                            items.addAll(originData)
+                        else
+                            items.addAll(originData.filter { it.name.contains(p0.toString()) || it.address.contains(p0.toString()) })
+
                         adapterStation2.notifyDataSetChanged()
                     }
                 })
