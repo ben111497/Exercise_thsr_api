@@ -34,13 +34,31 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
     private lateinit var adapterStation: StationSearchAdapter
     private lateinit var adapterStation2: StationSearchAdapter
 
-    private val stationName = ArrayList<String>()
-    private val stationAddress = ArrayList<String>()
-
     private lateinit var dbrw : SQLiteDatabase
     private var items = ArrayList<Station>()
     private var originData = ArrayList<Station>()
     private lateinit var map:GoogleMap
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        data?.extras?.let {
+            if(requestCode==1 && resultCode== Activity.RESULT_OK) {//畫面2回傳
+                x_init = it.getString("PositionLat").toDouble()
+                y_init = it.getString("PositionLon").toDouble()
+                val latLng = LatLng(x_init, y_init)
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+            }
+
+            if(requestCode==2 && resultCode== Activity.RESULT_OK){//畫面3回傳
+            }
+
+            if(requestCode==3 && resultCode== Activity.RESULT_OK){//畫面3回傳
+            }
+
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,43 +85,9 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
         items.addAll(originData)
         c.close()
 
-        //交換終點起點
-        change.setOnClickListener {
-            val change_item1 = start.text
-            val change_item2 = end.text
-            start.setText(change_item2)
-            end.setText(change_item1)
-            Method.switchTo(this, TestFragment())
-        }
-        //搜尋站點
-        station_search.setOnClickListener {
-            val bundle = Bundle()
-            val i = Intent(this, MainActivity2::class.java)
-            i.putExtras(bundle)  //此無資料
-            startActivityForResult(i, 1)
-        }
-        //時刻表規劃路線規劃
-        station_plan.setOnClickListener{
-            val startStation = start.text.toString().replace("車站", "")
-            val endStation = end.text.toString().replace("車站", "")
-            if (startStation.isEmpty() || endStation.isEmpty())
-                Toast.makeText(this, "起始站點或終點站點未輸入!", Toast.LENGTH_SHORT).show()
-            else {
-                if(startStation.contains(endStation))
-                    Toast.makeText(this, "終點站和起點站輸入相同!\n請更改!", Toast.LENGTH_SHORT).show()
-                else {
-                    val bundle = Bundle()
-                    val i = Intent(this, MainActivity3::class.java)
-                    bundle.putString("station_start", startStation)
-                    bundle.putString("station_end", endStation)
-                    i.putExtras(bundle)
-                    startActivityForResult(i, 2)
-                }
-            }
-        }
 
     }
-    //google map================================================================================================================================
+    //google map
     private val REQUEST_PERMISSIONS = 1
     override fun onRequestPermissionsResult (requestCode: Int ,permissions: Array<String>, grantResults: IntArray) {
         if (grantResults.isEmpty()) return
@@ -153,72 +137,42 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
         return false
     }
 
-    private fun showPopup(view: View) {
-        var popup: PopupMenu? = null;
-        popup = PopupMenu(this, view)
-        popup.inflate(R.menu.header_menu)
-        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-            when (item!!.itemId) {
-                R.id.start_point -> {
-                    val c = dbrw.rawQuery( "SELECT * FROM myTable",null)
-                    c.moveToFirst()
-                    for(i in 0 until c.count){
-                        if(String.format("%.2f",c.getString(1).toDouble())==String.format("%.2f",x_init)
-                            && String.format("%.2f",c.getString(2).toDouble())==String.format("%.2f",y_init)){
-                            start.text = "${c.getString(0)}"
-                        }
-                        c.moveToNext()
-                    }
-                }
-                R.id.end_point -> {
-                    val c = dbrw.rawQuery( "SELECT * FROM myTable",null)
-                    c.moveToFirst()
-                    for(i in 0 until c.count){
-                        if(String.format("%.2f",c.getString(1).toDouble())==String.format("%.2f",x_init)
-                            && String.format("%.2f",c.getString(2).toDouble())==String.format("%.2f",y_init)){
-                            end.text = "${c.getString(0)}"
-                        }
-                        c.moveToNext()
-                    }
-                }
-                R.id.rest_near -> {
-                    val bundle2 = Bundle()
-                    val i = Intent(this, MainActivity5::class.java)
-                    bundle2.putDouble("lat",x_init)
-                    bundle2.putDouble("lng",y_init)
-                    i.putExtras(bundle2)  //此無資料
-                    startActivityForResult(i, 3)
-                }
-                R.id.cancel -> {
-                    //無動作
-                }
-            }
-            true
-        })
-        popup.show()
-    }
-//頁面2回傳值==============================================================================================================================================
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        data?.extras?.let {
-            if(requestCode==1 && resultCode== Activity.RESULT_OK) {//畫面2回傳
-                x_init = it.getString("PositionLat").toDouble()
-                y_init = it.getString("PositionLon").toDouble()
-                val latLng = LatLng(x_init, y_init)
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-            }
-
-            if(requestCode==2 && resultCode== Activity.RESULT_OK){//畫面3回傳
-            }
-
-            if(requestCode==3 && resultCode== Activity.RESULT_OK){//畫面3回傳
-            }
-
-        }
-    }
-//==========================================================================================
     private fun setListener() {
+        //交換終點起點
+        change.setOnClickListener {
+            val change_item1 = start.text
+            val change_item2 = end.text
+            start.setText(change_item2)
+            end.setText(change_item1)
+            Method.switchTo(this, TestFragment())
+        }
+        //搜尋站點
+        station_search.setOnClickListener {
+            val bundle = Bundle()
+            val i = Intent(this, MainActivity2::class.java)
+            i.putExtras(bundle)  //此無資料
+            startActivityForResult(i, 1)
+        }
+        //時刻表規劃路線規劃
+        station_plan.setOnClickListener{
+            val startStation = start.text.toString().replace("車站", "")
+            val endStation = end.text.toString().replace("車站", "")
+            if (startStation.isEmpty() || endStation.isEmpty())
+                Toast.makeText(this, "起始站點或終點站點未輸入!", Toast.LENGTH_SHORT).show()
+            else {
+                if(startStation.contains(endStation))
+                    Toast.makeText(this, "終點站和起點站輸入相同!\n請更改!", Toast.LENGTH_SHORT).show()
+                else {
+                    val bundle = Bundle()
+                    val i = Intent(this, MainActivity3::class.java)
+                    bundle.putString("station_start", startStation)
+                    bundle.putString("station_end", endStation)
+                    i.putExtras(bundle)
+                    startActivityForResult(i, 2)
+                }
+            }
+        }
+
         start.setOnClickListener {
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
                 val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
@@ -309,4 +263,48 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
             }
     }
 
+    private fun showPopup(view: View) {
+        var popup: PopupMenu? = null;
+        popup = PopupMenu(this, view)
+        popup.inflate(R.menu.header_menu)
+        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
+            when (item!!.itemId) {
+                R.id.start_point -> {
+                    val c = dbrw.rawQuery( "SELECT * FROM myTable",null)
+                    c.moveToFirst()
+                    for(i in 0 until c.count){
+                        if(String.format("%.2f",c.getString(1).toDouble())==String.format("%.2f",x_init)
+                            && String.format("%.2f",c.getString(2).toDouble())==String.format("%.2f",y_init)){
+                            start.text = "${c.getString(0)}"
+                        }
+                        c.moveToNext()
+                    }
+                }
+                R.id.end_point -> {
+                    val c = dbrw.rawQuery( "SELECT * FROM myTable",null)
+                    c.moveToFirst()
+                    for(i in 0 until c.count){
+                        if(String.format("%.2f",c.getString(1).toDouble())==String.format("%.2f",x_init)
+                            && String.format("%.2f",c.getString(2).toDouble())==String.format("%.2f",y_init)){
+                            end.text = "${c.getString(0)}"
+                        }
+                        c.moveToNext()
+                    }
+                }
+                R.id.rest_near -> {
+                    val bundle2 = Bundle()
+                    val i = Intent(this, MainActivity5::class.java)
+                    bundle2.putDouble("lat",x_init)
+                    bundle2.putDouble("lng",y_init)
+                    i.putExtras(bundle2)  //此無資料
+                    startActivityForResult(i, 3)
+                }
+                R.id.cancel -> {
+                    //無動作
+                }
+            }
+            true
+        })
+        popup.show()
+    }
 }
