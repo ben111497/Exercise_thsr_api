@@ -236,6 +236,8 @@ class MainActivity3 : AppCompatActivity() {
                         items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${hours}時${minutes}分", leave_time))
                     else
                         items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${minutes}分", leave_time))
+
+                    items.sortBy { it.startTime }
                 }
                 adapter.notifyDataSetChanged()
             }
