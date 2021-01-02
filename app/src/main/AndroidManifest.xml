@@ -19,7 +19,8 @@
         <activity android:name=".MainActivity4" />
         <activity android:name=".MainActivity3" />
         <activity android:name=".MainActivity_homepage" />
-        <activity android:name=".MainActivity2" />
+        <activity android:name=".MainActivity2"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
