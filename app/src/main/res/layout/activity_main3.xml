@@ -6,45 +6,70 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity3">
 
-    <LinearLayout
-        android:id="@+id/linearLayout5"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:orientation="horizontal"
+        android:background="@color/orange_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/thsr" />
+            android:id="@+id/back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:orientation="horizontal"></LinearLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/start_station"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/thsr" />
 
         <TextView
             android:id="@+id/start_station"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:text="start"
             android:textAlignment="textEnd"
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/imageView" />
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="@+id/start_station"
+            app:layout_constraintEnd_toStartOf="@+id/end_station"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/start_station"
+            app:layout_constraintTop_toTopOf="@+id/start_station"
             app:srcCompat="@drawable/right" />
 
         <TextView
@@ -55,32 +80,99 @@
             android:text="end"
             android:textAlignment="viewStart"
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:text="車次"
+            android:textColor="@color/orange_primary"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="發車時間"
+            android:textColor="@color/orange_primary"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="車程"
+            android:textColor="@color/orange_primary"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:text="到站時間"
+            android:textColor="@color/orange_primary"
+            android:textSize="20dp" />
+
     </LinearLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/orange_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <ListView
         android:id="@+id/listview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="1dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/back"
+        android:divider="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/view2">
 
     </ListView>
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="50sp"
-        android:layout_height="40sp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
-        android:text="返回"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

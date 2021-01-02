@@ -16,7 +16,7 @@ class TestFragment: ObserverFragment()  {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Toast.makeText(mActivity, "成功", Toast.LENGTH_LONG).show()
+//        Toast.makeText(mActivity, "成功", Toast.LENGTH_LONG).show()
     }
 
     override fun update(p0: Observable?, p1: Any?) {}

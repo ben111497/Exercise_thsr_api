@@ -17,6 +17,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.core.view.get
+import com.example.lab12.adapter.StationTimeSearchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -33,15 +34,16 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity3 : AppCompatActivity() {
-    private lateinit var dbrw : SQLiteDatabase
-    private var items : ArrayList<String> = ArrayList(0)
-    private lateinit var adapter : ArrayAdapter<String>
+    class StationInfo(val number: String, val startTime: String, val totalTime: String, val arriveTime: String)
+    private lateinit var dbrw: SQLiteDatabase
+    private var items = ArrayList<StationInfo>()
+    private lateinit var adapter: StationTimeSearchAdapter
 
-    val APPID = "1d75f843121143c0addc39550ba48b13"
+    private val APPID = "1d75f843121143c0addc39550ba48b13"
     //申請的APPKey
-    val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
-    lateinit var station_start:String
-    lateinit var station_end:String
+    private val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
+    private lateinit var station_start: String
+    private lateinit var station_end: String
 
     class rail_plan : ArrayList<rail_planItem>()
     data class rail_planItem(
@@ -112,10 +114,22 @@ class MainActivity3 : AppCompatActivity() {
             start_station.setText(station_start)
             end_station.setText(station_end)
         }
-        dbrw=MyDBHelper(this).writableDatabase
+
         //取得資料庫實體
-        adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1 , items)
+        dbrw = MyDBHelper(this).writableDatabase
+
+        adapter = StationTimeSearchAdapter(this, items)
         listview.adapter = adapter
+        listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val bundle2 = Bundle()
+            //parent[position].setBackgroundColor(Color.YELLOW)
+            val i = Intent(this@MainActivity3, MainActivity4::class.java)
+            bundle2.putString("shift", items[position].number)
+            bundle2.putString("station_start", station_start)
+            bundle2.putString("station_end", station_end)
+            i.putExtras(bundle2)
+            startActivityForResult(i, 1)
+        }
         //宣告 Adapter，使用 simple_list_item_1並連結 listView
 
 //台鐵授權============================================================================================================
@@ -148,13 +162,13 @@ class MainActivity3 : AppCompatActivity() {
             "yyyy-MM-dd", Locale.US
         )
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"))
-        var currentday= dateFormat.format(calendar.time)
+        val currentday= dateFormat.format(calendar.time)
 
         val s = dbrw.rawQuery( "SELECT * FROM myTable WHERE StationName LIKE '%${station_start}%'",null)
         val e = dbrw.rawQuery( "SELECT * FROM myTable WHERE StationName LIKE '%${station_end}%'",null)
-        // items.clear()
-        var OriginStationID:String
-        var DestinationStationID:String
+
+        val OriginStationID:String
+        val DestinationStationID:String
         s.moveToFirst()
         OriginStationID=s.getString(4)
         e.moveToFirst()
@@ -188,7 +202,6 @@ class MainActivity3 : AppCompatActivity() {
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
-
     }
 
     //廣播=============================================================================================================================
@@ -198,7 +211,6 @@ class MainActivity3 : AppCompatActivity() {
                 val data = Gson().fromJson(it, rail_plan::class.java)
                 //listview===================================================================================
                 items.clear()
-                items.add("車次\t\t\t\t\t\t\t發車時間\t\t\t\t\t車程\t\t\t\t\t\t\t到站時間")
                 var dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
                 var date="0000-00-00 "
                 var startTime: Date
@@ -209,9 +221,8 @@ class MainActivity3 : AppCompatActivity() {
                 var minutes:Long
                 var arrive_time:String
                 var leave_time:String
-                var direction:String
-                if(data[0].DailyTrainInfo.Direction==0)direction="南下"
-                else direction="北上"
+                val direction = if (data[0].DailyTrainInfo.Direction == 0) "南下" else "北上"
+
                 for(i in 0 until data.size) {
                     arrive_time=data[i].OriginStopTime.ArrivalTime  //到站時間
                     leave_time=data[i].DestinationStopTime.DepartureTime //發車時間
@@ -221,26 +232,12 @@ class MainActivity3 : AppCompatActivity() {
                     days = diff / (1000 * 60 * 60 * 24)
                     hours = (diff - days * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
                     minutes = (diff - days * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60)
-                    if(hours>0.0) {
-                        items.add("${data[i].DailyTrainInfo.TrainNo}\t\t\t\t\t\t\t${arrive_time}\t\t\t\t\t\t\t${hours}小時${minutes}分鐘\t\t\t${leave_time}")
-                    }
-                    else {
-                        items.add("${data[i].DailyTrainInfo.TrainNo}\t\t\t\t\t\t\t${arrive_time}\t\t\t\t\t\t\t${minutes}分鐘\t\t\t\t\t\t\t${leave_time}")
-                    }
+                    if (hours > 0.0)
+                        items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${hours}時${minutes}分", leave_time))
+                    else
+                        items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${minutes}分", leave_time))
                 }
                 adapter.notifyDataSetChanged()
-
-               // listview[0].setBackgroundColor(Color.YELLOW)
-                listview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
-                    val bundle2 = Bundle()
-                    //parent[position].setBackgroundColor(Color.YELLOW)
-                    val i = Intent(this@MainActivity3, MainActivity4::class.java)
-                    bundle2.putString("shift", data[position].DailyTrainInfo.TrainNo)
-                    bundle2.putString("station_start",station_start)
-                    bundle2.putString("station_end",station_end)
-                    i.putExtras(bundle2)
-                   startActivityForResult(i, 1)
-                })
             }
         }
 
@@ -248,9 +245,9 @@ class MainActivity3 : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         data?.extras?.let {
-            if(requestCode==1 && resultCode== Activity.RESULT_OK){//畫面2回傳
+            if(requestCode==1 && resultCode== Activity.RESULT_OK){
+                //畫面2回傳
             }
-
         }
     }
 }

@@ -122,7 +122,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
             map.addMarker(marker)
             c.moveToNext()
         }
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(x_init,y_init),8f))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(x_init,y_init), 8f))
         map.setOnMarkerClickListener(this)
     }
 

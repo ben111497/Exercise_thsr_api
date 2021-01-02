@@ -104,8 +104,8 @@ class MainActivity5 : AppCompatActivity() {
         val intentfilter = IntentFilter("MyMessage5")
         registerReceiver(receiver, intentfilter)
         intent?.extras?.let {
-            lat_init=it.getDouble("lat")
-            lng_init=it.getDouble("lng")
+            lat_init = it.getDouble("lat")
+            lng_init = it.getDouble("lng")
         }
         back.setOnClickListener {
             val bundle = Bundle()
