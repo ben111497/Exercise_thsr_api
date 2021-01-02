@@ -148,6 +148,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
             x_init = it.latitude
             y_init = it.longitude
         }
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
         showListDialog()
         return false
     }
