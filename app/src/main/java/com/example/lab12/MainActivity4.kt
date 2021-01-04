@@ -104,6 +104,9 @@ class MainActivity4 : AppCompatActivity() {
             station_start=it.getString("station_start")
             station_end=it.getString("station_end")
         }
+
+    tv_start_station.text = station_start
+    tv_end_station.text = station_end
 //台鐵授權============================================================================================================
         val intentfilter = IntentFilter("Message4")
         registerReceiver(receiver, intentfilter)
@@ -145,12 +148,12 @@ class MainActivity4 : AppCompatActivity() {
             }
         })
 
-//        back.setOnClickListener {
-//            val bundle = Bundle()
-//            val intent = Intent().putExtras(bundle)
-//            setResult(Activity.RESULT_OK, intent)
-//            finish()
-//        }
+        back.setOnClickListener {
+            val bundle = Bundle()
+            val intent = Intent().putExtras(bundle)
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
     }
     //廣播=============================================================================================================================
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {

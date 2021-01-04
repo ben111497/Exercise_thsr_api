@@ -17,7 +17,8 @@
         <activity android:name=".LoginActivity"></activity>
         <activity android:name=".MainActivity5"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".MainActivity4" />
+        <activity android:name=".MainActivity4"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".MainActivity3"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".MainActivity_homepage" />

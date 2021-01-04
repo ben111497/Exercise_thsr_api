@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout4"
+            android:id="@+id/cl_start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -68,14 +68,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout5"
+            android:id="@+id/cl_end"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_white"
-            app:layout_constraintEnd_toEndOf="@+id/constraintLayout4"
-            app:layout_constraintStart_toStartOf="@+id/constraintLayout4"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+            app:layout_constraintEnd_toEndOf="@+id/cl_start"
+            app:layout_constraintStart_toStartOf="@+id/cl_start"
+            app:layout_constraintTop_toBottomOf="@+id/cl_start">
 
             <TextView
                 android:id="@+id/textView12"
@@ -122,9 +122,9 @@
             android:layout_height="0dp"
             android:layout_marginEnd="16dp"
             android:rotation="90"
-            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout5"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_end"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout4"
+            app:layout_constraintTop_toTopOf="@+id/cl_start"
             app:srcCompat="@drawable/ggb" />
 
         <TextView
@@ -144,7 +144,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/station_plan"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
+            app:layout_constraintTop_toBottomOf="@+id/cl_end" />
 
         <TextView
             android:id="@+id/station_plan"

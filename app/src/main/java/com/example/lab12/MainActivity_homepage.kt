@@ -174,7 +174,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
             }
         }
 
-        start.setOnClickListener {
+        cl_start.setOnClickListener {
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
                 val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
                 val listView = it.findViewById<ListView>(R.id.listView)
@@ -208,7 +208,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
             }
         }
 
-        end.setOnClickListener {
+        cl_end.setOnClickListener {
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
                 val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
                 val listView = it.findViewById<ListView>(R.id.listView)
