@@ -165,7 +165,7 @@ class MainActivity4 : AppCompatActivity() {
                 var name1= arrayOfNulls<String>(data[0].GeneralTimetable.StopTimes.size)
                 var station1= arrayOfNulls<String>(data[0].GeneralTimetable.StopTimes.size)
                 var time1= arrayOfNulls<String>(data[0].GeneralTimetable.StopTimes.size)
-                for(i in 0 until data[0].GeneralTimetable.StopTimes.size) {
+                for(i in data[0].GeneralTimetable.StopTimes.indices) {
                     if(data[0].GeneralTimetable.StopTimes[i].StopSequence<10){
                         name1[i]="0${data[0].GeneralTimetable.StopTimes[i].StopSequence}"
                         station1[i]="${data[0].GeneralTimetable.StopTimes[i].StationName.Zh_tw}"
