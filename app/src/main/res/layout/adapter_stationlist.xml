@@ -50,7 +50,7 @@
             android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/blue_green"
+            android:background="@color/orange_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_address"
             app:layout_constraintStart_toStartOf="@+id/tv_station" />

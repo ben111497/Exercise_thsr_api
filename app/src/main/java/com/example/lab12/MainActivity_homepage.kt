@@ -63,6 +63,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_homepage)
+
         dbrw = MyDBHelper(this).writableDatabase
         //取得資料庫實體
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
