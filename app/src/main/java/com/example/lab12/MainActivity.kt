@@ -17,12 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.example.lab12.StationName as StationName1
-//全域變數==================
 
-//經緯度儲存=====================================================================
-
-//=====================================================================
-//高鐵基本站資料=====================================================================
 class rail : ArrayList<railwayItem>()
 data class railwayItem(
     val OperatorID: String, //營運業者代碼
@@ -44,7 +39,7 @@ data class StationPosition(
 )
 //=====================================================================
 
-class MainActivity : AppCompatActivity()  {
+class MainActivity : BaseActivity()  {
     val APPID = "1d75f843121143c0addc39550ba48b13"
     //申請的APPKey
     val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
@@ -92,8 +87,7 @@ class MainActivity : AppCompatActivity()  {
         OkHttpClient().newCall(req).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 sendBroadcast(
-                    Intent("MyMessage")
-                        .putExtra("json", response.body()?.string())
+                    Intent("MyMessage").putExtra("json", response.body()?.string())
                 )
                 //val data = Gson().fromJson(response.body()?.string(), rail::class.java)
             }

@@ -6,19 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
+import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.AdapterView
 import androidx.annotation.RequiresApi
-import com.google.android.gms.maps.model.LatLng
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main5.*
 import okhttp3.*
 import java.io.IOException
-import java.security.SignatureException
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainActivity5 : AppCompatActivity() {
     data class rest(
@@ -106,8 +104,8 @@ class MainActivity5 : AppCompatActivity() {
         val intentfilter = IntentFilter("MyMessage5")
         registerReceiver(receiver, intentfilter)
         intent?.extras?.let {
-            lat_init=it.getDouble("lat")
-            lng_init=it.getDouble("lng")
+            lat_init = it.getDouble("lat")
+            lng_init = it.getDouble("lng")
         }
         back.setOnClickListener {
             val bundle = Bundle()
@@ -127,10 +125,7 @@ class MainActivity5 : AppCompatActivity() {
 
         OkHttpClient().newCall(req).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                sendBroadcast(
-                    Intent("MyMessage5")
-                        .putExtra("json", response.body()?.string())
-                )
+                sendBroadcast(Intent("MyMessage5").putExtra("json", response.body()?.string()))
             }
             override fun onFailure(call: Call, e: IOException?) {
                 Log.e("查詢失敗", "$e")
@@ -164,7 +159,15 @@ class MainActivity5 : AppCompatActivity() {
                 }
                 val myListAdapter = MyListAdapter(this@MainActivity5, rest_name, address, distance, access)
                 listview.adapter = myListAdapter
-
+                listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                    val startLat = lat_init
+                    val startLng = lng_init
+                    val endLat = lat[position]
+                    val endLng = lng[position]
+                    val uri = Uri.parse("http://maps.google.com/maps?f=d&saddr=${startLat}%20${startLng}&daddr=${endLat}%20${endLng}&hl=en")
+                    val it = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(it)
+                }
             }
         }
     }

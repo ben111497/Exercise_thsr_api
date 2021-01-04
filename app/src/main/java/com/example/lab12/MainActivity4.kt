@@ -88,13 +88,12 @@ class MainActivity4 : AppCompatActivity() {
         val En: String,
         val Zh_tw: String
     )
-    val APPID = "1d75f843121143c0addc39550ba48b13"
+    private val APPID = "1d75f843121143c0addc39550ba48b13"
     //申請的APPKey
-    val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
-    var shift:String=""
+    private val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
+    private var shift: String= ""
     private lateinit var station_start:String
     private lateinit var station_end:String
-    private lateinit var adapter : ArrayAdapter<String>
 //==============================================
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +104,9 @@ class MainActivity4 : AppCompatActivity() {
             station_start=it.getString("station_start")
             station_end=it.getString("station_end")
         }
+
+    tv_start_station.text = station_start
+    tv_end_station.text = station_end
 //台鐵授權============================================================================================================
         val intentfilter = IntentFilter("Message4")
         registerReceiver(receiver, intentfilter)
@@ -134,16 +136,12 @@ class MainActivity4 : AppCompatActivity() {
         val req = Request.Builder()
             .header("Authorization", sAuth)
             .header("x-date", xdate)
-            // .header("Accept-Encoding","gzip")
             .url(APIUrl)
             .build()
 
         OkHttpClient().newCall(req).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                sendBroadcast(
-                    Intent("Message4")
-                        .putExtra("json", response.body()?.string())
-                )
+                sendBroadcast(Intent("Message4").putExtra("json", response.body()?.string()))
             }
             override fun onFailure(call: Call, e: IOException?) {
                 Log.e("查詢失敗", "$e")

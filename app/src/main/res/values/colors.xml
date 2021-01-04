@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#F3F3F3</color>
+    <color name="colorPrimaryDark">#4a8fe1</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="ivoryWhite">#f8f1e9</color>
+    <color name="blue">#a8cefa</color>
+    <color name="blue_green">#C5EFF0</color>
+    <color name="gray_light">#D8D8D8</color>
+    <color name="gray">#5E5E5E</color>
+    <color name="black">#000000</color>
+    <color name="black2">#333333</color>
+    <color name="orange_light">#FFE6CF</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="black_popular">#333333</color>
+    <color name="blue_positive_logic">#0059B2</color>
+    <color name="gray_negative_logic">#AAAAAA</color>
+    <color name="gray_secondary">#F3F3F3</color>
+
+    <color name="status_bar_color">#8AD1E9</color>
+    <color name="orange_primary">#FFAB66</color>
+
+    <color name="blue_light">#BCE9FF</color>
+    <color name="gray_light2">#DCDCDC</color>
+
+    <!--  學習狀況顏色  -->
+    <color name="num_red">#F97A8D</color>
+    <color name="num_blue">#468EE6</color>
+    <color name="num_black">#333333</color>
+
+    <!--  影片等級顏色  -->
+    <color name="level_easy">#5BBCAA</color>
+    <color name="level_normal">#478EE6</color>
+    <color name="level_hard">#FFC23B</color>
+
+    <!--  學習狀態顏色  -->
+    <color name="learn_status_free">#51E59E</color>
+    <color name="learn_status_msg">#BCBCBC</color>
+    <color name="learn_status_busy">#FF5252</color>
+
+    <!--  性別顏色  -->
+    <color name="gender_boy">#478EE6</color>
+    <color name="gender_girl">#F97A8D</color>
+
+    <!--  付費方案相關顏色  -->
+    <color name="pay_scheme_short_bg">#C3E2F6</color>
+    <color name="pay_scheme_normal_bg">#FFD9D7</color>
+    <color name="pay_scheme_long_bg">#FFE8BA</color>
+    <color name="pay_scheme_short_text">#3A83A3</color>
+    <color name="pay_scheme_normal_text">#FF2C5B</color>
+    <color name="pay_scheme_long_text">#FF8700</color>
+
+    <!-- 影片測驗相關顏色 -->
+    <color name="test_text">#5B5B5B</color>
+    <color name="test_orange">#FFBB78</color>
+    <color name="test_blueGreen">#7FD3C2</color>
+    <color name="test_orange_frame">#FFC23B</color>
+    <color name="test_blueGreen_frame">#8AD1E9</color>
+    <color name="test_background">#F9F9F9</color>
+    <color name="test_pink">#F97A8D</color>
+    <color name="test_blue">#468EE6</color>
+    <color name="test_black">#000000</color>
+    <color name="test_black2">#333333</color>
+    <color name="test_blue_dark">#3B90AD</color>
+    <color name="test_orange_dark">#E58200</color>
+    <color name="test_background_blue">#F0F8FF</color>
+    <color name="test_background_yellow">#FFFBF0</color>
 </resources>
