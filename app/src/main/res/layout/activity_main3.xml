@@ -30,11 +30,11 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/start_station"
@@ -42,7 +42,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/back"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/thsr" />
+            app:srcCompat="@drawable/rail_station_icon" />
 
         <TextView
             android:id="@+id/start_station"

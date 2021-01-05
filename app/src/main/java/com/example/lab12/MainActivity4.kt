@@ -33,6 +33,7 @@ class MainActivity4 : AppCompatActivity() {
     private var shift = ""
     private lateinit var station_start: String
     private lateinit var station_end: String
+    private var direction = "南下"
 
     private var trainData = ArrayList<TrainInfo>()
 
@@ -41,15 +42,15 @@ class MainActivity4 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main4)
         intent?.extras?.let {
-            shift = it.getString("shift")
-            station_start = it.getString("station_start")
-            station_end = it.getString("station_end")
+            shift = it.getString("Shift")
+            station_start = it.getString("StationStart")
+            station_end = it.getString("StationEnd")
+            direction = it.getString("Direction")
         }
 
         DialogManager.instance.showLoading(this)
         setListener()
-        tv_start_station.text = station_start
-        tv_end_station.text = station_end
+        tv_number.text = "${shift} ${direction}"
 
         //台鐵授權
         val intentfilter = IntentFilter("Message4")

@@ -169,8 +169,8 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
                 else {
                     val bundle = Bundle()
                     val i = Intent(this, MainActivity3::class.java)
-                    bundle.putString("station_start", startStation)
-                    bundle.putString("station_end", endStation)
+                    bundle.putString("StationStart", startStation)
+                    bundle.putString("StationEnd", endStation)
                     i.putExtras(bundle)
                     startActivityForResult(i, 2)
                 }

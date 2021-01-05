@@ -34,7 +34,7 @@ class StationTimeSearchAdapter(context: Context, list: ArrayList<MainActivity3.S
 
         val item = getItem(position) ?: return view
 
-        holder.tv_number.text = item.number
+        holder.tv_number.text = "${item.number}\n${item.direction}"
         holder.tv_start.text = item.startTime
         holder.tv_time.text = item.totalTime
         holder.tv_arrive.text = item.arriveTime

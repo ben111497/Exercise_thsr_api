@@ -36,7 +36,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity3 : AppCompatActivity() {
-    class StationInfo(val number: String, val startTime: String, val totalTime: String, val arriveTime: String)
+    class StationInfo(val number: String, val startTime: String, val totalTime: String, val arriveTime: String, val direction: String)
 
     private lateinit var dbrw: SQLiteDatabase
     private var items = ArrayList<StationInfo>()
@@ -47,14 +47,15 @@ class MainActivity3 : AppCompatActivity() {
     private val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
     private lateinit var station_start: String
     private lateinit var station_end: String
+    private var direction = "南下"
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
         intent?.extras?.let {
-            station_start=it.getString("station_start")
-            station_end=it.getString("station_end")
+            station_start = it.getString("StationStart")
+            station_end = it.getString("StationEnd")
             start_station.setText(station_start)
             end_station.setText(station_end)
         }
@@ -69,9 +70,10 @@ class MainActivity3 : AppCompatActivity() {
             val bundle2 = Bundle()
             //parent[position].setBackgroundColor(Color.YELLOW)
             val i = Intent(this@MainActivity3, MainActivity4::class.java)
-            bundle2.putString("shift", items[position].number)
-            bundle2.putString("station_start", station_start)
-            bundle2.putString("station_end", station_end)
+            bundle2.putString("Shift", items[position].number)
+            bundle2.putString("StationStart", station_start)
+            bundle2.putString("StationEnd", station_end)
+            bundle2.putString("Direction", direction)
             i.putExtras(bundle2)
             startActivityForResult(i, 1)
         }
@@ -142,9 +144,7 @@ class MainActivity3 : AppCompatActivity() {
         })
 
         back.setOnClickListener {
-            val bundle = Bundle()
-            val intent = Intent().putExtras(bundle)
-            setResult(Activity.RESULT_OK, intent)
+            setResult(Activity.RESULT_OK, Intent())
             finish()
         }
     }
@@ -166,7 +166,7 @@ class MainActivity3 : AppCompatActivity() {
                 var minutes:Long
                 var arrive_time:String
                 var leave_time:String
-                val direction = if (data[0].DailyTrainInfo.Direction == 0) "南下" else "北上"
+                direction = if (data[0].DailyTrainInfo.Direction == 0) "南下" else "北上"
 
                 for(i in 0 until data.size) {
                     arrive_time=data[i].OriginStopTime.ArrivalTime  //到站時間
@@ -178,9 +178,9 @@ class MainActivity3 : AppCompatActivity() {
                     hours = (diff - days * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
                     minutes = (diff - days * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60)
                     if (hours > 0.0)
-                        items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${hours}時${minutes}分", leave_time))
+                        items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${hours}時${minutes}分", leave_time, direction))
                     else
-                        items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${minutes}分", leave_time))
+                        items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${minutes}分", leave_time, direction))
 
                     items.sortBy { it.startTime }
                 }
