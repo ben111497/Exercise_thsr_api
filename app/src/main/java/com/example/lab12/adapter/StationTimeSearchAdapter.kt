@@ -5,13 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.lab12.MainActivity3
-import com.example.lab12.MainActivity_homepage
+import com.example.lab12.ThsrInfoActivity
 import com.example.lab12.R
 
-class StationTimeSearchAdapter(context: Context, list: ArrayList<MainActivity3.StationInfo>):
-    ArrayAdapter<MainActivity3.StationInfo>(context, R.layout.adapter_stationinfo, list) {
+class StationTimeSearchAdapter(context: Context, list: ArrayList<ThsrInfoActivity.StationInfo>):
+    ArrayAdapter<ThsrInfoActivity.StationInfo>(context, R.layout.adapter_stationinfo, list) {
     private class ViewHolder(v: View) {
         val tv_number: TextView = v.findViewById(R.id.tv_number)
         val tv_start: TextView = v.findViewById(R.id.tv_start)

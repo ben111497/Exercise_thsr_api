@@ -2,22 +2,16 @@ package com.example.lab12
 
 
 import android.app.Activity
-import android.app.PendingIntent.getActivity
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.example.lab12.tools.Method
-import java.net.URL
 
 
-class MyListAdapter(private val context: Activity, list: ArrayList<MainActivity5.StoreInfo>)
-    : ArrayAdapter<MainActivity5.StoreInfo>(context, R.layout.activity_near_rest, list) {
+class MyListAdapter(private val context: Activity, list: ArrayList<NearRestActivity.StoreInfo>)
+    : ArrayAdapter<NearRestActivity.StoreInfo>(context, R.layout.activity_near_rest, list) {
 
     private class ViewHolder(v: View) {
         val tv_name: TextView = v.findViewById(R.id.tv_name)

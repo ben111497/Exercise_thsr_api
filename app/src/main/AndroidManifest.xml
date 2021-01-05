@@ -15,14 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".MainActivity5"
+        <activity android:name=".NearRestActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".MainActivity4"
+        <activity android:name=".ShiftInfoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".MainActivity3"
+        <activity android:name=".ThsrInfoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".MainActivity_homepage" />
-        <activity android:name=".MainActivity2"
+        <activity android:name=".HomepageActivity" />
+        <activity android:name=".StationSearchActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <uses-library
@@ -33,7 +33,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAsgMnGw89Q8NRiaC9zTpVCq0Fu9Ga-dPU" />
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".InitActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

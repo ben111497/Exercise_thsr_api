@@ -1,7 +1,6 @@
 package com.example.lab12
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
@@ -23,10 +22,9 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.activity_main_homepage.*
 
-class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickListener {
+class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListener {
     class Station(val name: String, val address: String, val positionLat: String, val positionLon: String)
     private var x_init = 23.583234
     private var y_init = 120.5825975
@@ -155,7 +153,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
         //搜尋站點
         station_search.setOnClickListener {
             val bundle = Bundle()
-            val i = Intent(this, MainActivity2::class.java)
+            val i = Intent(this, StationSearchActivity::class.java)
             i.putExtras(bundle)  //此無資料
             startActivityForResult(i, 1)
         }
@@ -170,7 +168,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
                     Toast.makeText(this, "終點站和起點站輸入相同!\n請更改!", Toast.LENGTH_SHORT).show()
                 else {
                     val bundle = Bundle()
-                    val i = Intent(this, MainActivity3::class.java)
+                    val i = Intent(this, ThsrInfoActivity::class.java)
                     bundle.putString("StationStart", startStation)
                     bundle.putString("StationEnd", endStation)
                     i.putExtras(bundle)
@@ -258,7 +256,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
                     1 -> originData.find { it.positionLat == x_init.toString() || it.positionLon == y_init.toString() }?.name?.let { end.text = "${it}車站" }
                     2 -> {
                         val bundle2 = Bundle()
-                        val i = Intent(this, MainActivity5::class.java)
+                        val i = Intent(this, NearRestActivity::class.java)
                         bundle2.putDouble("lat", x_init)
                         bundle2.putDouble("lng", y_init)
                         i.putExtras(bundle2)
@@ -299,7 +297,7 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
                 }
                 R.id.rest_near -> {
                     val bundle2 = Bundle()
-                    val i = Intent(this, MainActivity5::class.java)
+                    val i = Intent(this, NearRestActivity::class.java)
                     bundle2.putDouble("lat",x_init)
                     bundle2.putDouble("lng",y_init)
                     i.putExtras(bundle2)  //此無資料

@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity4 : AppCompatActivity() {
+class ShiftInfoActivity : AppCompatActivity() {
     class TrainInfo(val name: String, val startTime: String, val arriveTime: String)
 
     private val APPID = "1d75f843121143c0addc39550ba48b13"
@@ -111,7 +111,7 @@ class MainActivity4 : AppCompatActivity() {
                     trainData.add(TrainInfo(stopTime.StationName.Zh_tw, stopTime.DepartureTime ?: "終點站", stopTime.ArrivalTime ?: "起點站"))
                 }
 
-                val myListAdapter = MyListAdapter_station_time(this@MainActivity4, trainData, station_start , station_end)
+                val myListAdapter = MyListAdapter_station_time(this@ShiftInfoActivity, trainData, station_start , station_end)
                 listview.adapter = myListAdapter
 
                 DialogManager.instance.dismissAll()

@@ -6,28 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
-import androidx.core.view.get
 import com.example.lab12.adapter.StationTimeSearchAdapter
 import com.example.lab12.data.RailPlan
 import com.example.lab12.manager.DialogManager
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.activity_main2.listview
 import kotlinx.android.synthetic.main.activity_main3.*
-import kotlinx.android.synthetic.main.activity_main_homepage.*
 import okhttp3.*
 import java.io.IOException
 import java.security.SignatureException
@@ -35,7 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity3 : AppCompatActivity() {
+class ThsrInfoActivity : AppCompatActivity() {
     class StationInfo(val number: String, val startTime: String, val totalTime: String, val arriveTime: String, val direction: String)
 
     private lateinit var dbrw: SQLiteDatabase
@@ -69,7 +59,7 @@ class MainActivity3 : AppCompatActivity() {
         listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val bundle2 = Bundle()
             //parent[position].setBackgroundColor(Color.YELLOW)
-            val i = Intent(this@MainActivity3, MainActivity4::class.java)
+            val i = Intent(this@ThsrInfoActivity, ShiftInfoActivity::class.java)
             bundle2.putString("Shift", items[position].number)
             bundle2.putString("StationStart", station_start)
             bundle2.putString("StationEnd", station_end)

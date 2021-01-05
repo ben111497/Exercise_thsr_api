@@ -10,10 +10,10 @@ import android.text.TextWatcher
 import com.example.lab12.adapter.StationSearchAdapter
 import kotlinx.android.synthetic.main.activity_main2.*
 
-class MainActivity2 : AppCompatActivity() {
+class StationSearchActivity : AppCompatActivity() {
     private lateinit var dbrw : SQLiteDatabase
-    private var items = ArrayList<MainActivity_homepage.Station>()
-    private var originData = ArrayList<MainActivity_homepage.Station>()
+    private var items = ArrayList<HomepageActivity.Station>()
+    private var originData = ArrayList<HomepageActivity.Station>()
 
     private lateinit var adapter : StationSearchAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class MainActivity2 : AppCompatActivity() {
         c.moveToFirst()
         items.clear()
         for(i in 0 until c.count){
-            originData.add(MainActivity_homepage.Station(c.getString(0),  c.getString(3), c.getString(1), c.getString(2)))
+            originData.add(HomepageActivity.Station(c.getString(0),  c.getString(3), c.getString(1), c.getString(2)))
             c.moveToNext()
         }
         items.addAll(originData)

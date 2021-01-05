@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.lab12.MainActivity_homepage
+import com.example.lab12.HomepageActivity
 import com.example.lab12.R
 
-class StationSearchAdapter(context: Context, list: ArrayList<MainActivity_homepage.Station>, private val listener: MsgListener):
-    ArrayAdapter<MainActivity_homepage.Station>(context, R.layout.adapter_stationlist, list) {
+class StationSearchAdapter(context: Context, list: ArrayList<HomepageActivity.Station>, private val listener: MsgListener):
+    ArrayAdapter<HomepageActivity.Station>(context, R.layout.adapter_stationlist, list) {
     private class ViewHolder(v: View) {
         val tv_text: TextView = v.findViewById(R.id.tv_station)
         val tv_address: TextView = v.findViewById(R.id.tv_address)

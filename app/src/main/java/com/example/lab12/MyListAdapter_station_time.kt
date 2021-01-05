@@ -1,16 +1,13 @@
 package com.example.lab12
 
 import android.content.Context
-import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import kotlinx.android.synthetic.main.activity_main4.view.*
 
-class MyListAdapter_station_time(context: Context, list: ArrayList<MainActivity4.TrainInfo>,
+class MyListAdapter_station_time(context: Context, list: ArrayList<ShiftInfoActivity.TrainInfo>,
                                  private val station_start: String, private val station_end: String)
-    : ArrayAdapter<MainActivity4.TrainInfo>(context, R.layout.custom_list_station_time, list) {
+    : ArrayAdapter<ShiftInfoActivity.TrainInfo>(context, R.layout.custom_list_station_time, list) {
 
     private class ViewHolder(v: View) {
         val tv_station: TextView = v.findViewById(R.id.tv_station)

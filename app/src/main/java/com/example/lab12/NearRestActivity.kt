@@ -1,7 +1,6 @@
 package com.example.lab12
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -21,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_main5.*
 import okhttp3.*
 import java.io.IOException
 
-class MainActivity5 : AppCompatActivity() {
+class NearRestActivity : AppCompatActivity() {
     class StoreInfo(val restName: String, val address: String, val distance: String, 
                     val access: Double, val picture: String, val phoneNumber: String)
 
@@ -91,7 +90,7 @@ class MainActivity5 : AppCompatActivity() {
                     storeDataList.add(StoreInfo(content.name, content.vicinity, "${str}公里", content.rating, content.photo, content.phone))
                 }
 
-                val myListAdapter = MyListAdapter(this@MainActivity5, storeDataList)
+                val myListAdapter = MyListAdapter(this@NearRestActivity, storeDataList)
                 listview.adapter = myListAdapter
                 listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                     val uri = Uri.parse("http://maps.google.com/maps?f=d&saddr=${latInit}%20${lngInt}&daddr=${lat[position]}%20${lng[position]}&hl=en")

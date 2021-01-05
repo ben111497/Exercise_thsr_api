@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : BaseActivity()  {
+class InitActivity : BaseActivity()  {
 
     class rail : ArrayList<railwayItem>()
     data class railwayItem(
@@ -126,7 +126,7 @@ class MainActivity : BaseActivity()  {
                     } catch (e: Exception) {
                     }
                 }
-                val i = Intent(this@MainActivity, MainActivity_homepage::class.java)
+                val i = Intent(this@InitActivity, HomepageActivity::class.java)
                 startActivityForResult(i, 1)
             }
         }
