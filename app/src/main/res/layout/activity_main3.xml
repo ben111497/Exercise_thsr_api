@@ -29,17 +29,18 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="50dp"
+            android:layout_width="80dp"
             android:layout_height="50dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/start_station"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/back"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/thsr" />
 
@@ -62,7 +63,7 @@
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="@+id/start_station"

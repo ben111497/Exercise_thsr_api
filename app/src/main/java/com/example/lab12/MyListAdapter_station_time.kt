@@ -1,37 +1,45 @@
 package com.example.lab12
 
-
-import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.activity_main4.view.*
 
-class MyListAdapter_station_time(private val context: Activity, private val number: Array<String?>, private val station: Array<String?>, private val time: Array<String?>
-                                 , private val station_start: String, private val station_end: String)
-    : ArrayAdapter<String>(context, R.layout.custom_list_station_time,number) {
+class MyListAdapter_station_time(context: Context, list: ArrayList<MainActivity4.TrainInfo>,
+                                 private val station_start: String, private val station_end: String)
+    : ArrayAdapter<MainActivity4.TrainInfo>(context, R.layout.custom_list_station_time, list) {
 
-    override fun getView(position: Int, view: View?, parent: ViewGroup): View {
-        val inflater = context.layoutInflater
-        val rowView = inflater.inflate(R.layout.custom_list_station_time, null, true)
-        val number2 = rowView.findViewById(R.id.number) as TextView
-        val station2 = rowView.findViewById(R.id.station) as TextView
-        val time2 = rowView.findViewById(R.id.time) as TextView
-        val cl_all=rowView.findViewById(R.id.cl_all) as ConstraintLayout
-        for (i in 0 until position+1) {
-            if (station[i] == station_start||station[i] == station_end) {
-                number2.text = "${number[i]}:"
-                station2.text = "${station[i]}高鐵站"
-                time2.text = time[i]
-                cl_all.setBackgroundColor(Color.YELLOW)
-            } else {
-                number2.text = "${number[i]}:"
-                station2.text = "${station[i]}高鐵站"
-                time2.text = time[i]
-                cl_all.setBackgroundColor(Color.alpha(255))
-            }
+    private class ViewHolder(v: View) {
+        val tv_station: TextView = v.findViewById(R.id.tv_station)
+        val tv_start_time: TextView = v.findViewById(R.id.tv_start_time)
+        val tv_arrive_time: TextView = v.findViewById(R.id.tv_arrive_time)
+        val cl_all: ConstraintLayout = v.findViewById(R.id.cl_all)
+    }
+
+    override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
+        val view: View
+        val holder: ViewHolder
+
+        if(convertView == null){
+            view = View.inflate(context, R.layout.custom_list_station_time, null)
+            holder = ViewHolder(view)
+            view.tag = holder
+        } else {
+            holder = convertView.tag as ViewHolder
+            view = convertView
         }
-        return rowView
+
+        val item = getItem(position) ?: return view
+
+        holder.tv_station.text = item.name
+        holder.tv_start_time.text = item.startTime
+        holder.tv_arrive_time.text = item.arriveTime
+
+        if (item.name == station_start || item.name == station_end) holder.cl_all.background = context.getDrawable(R.drawable.bg_orange_all2)
+
+        return view
     }
 }

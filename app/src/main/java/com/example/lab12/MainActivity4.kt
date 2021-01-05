@@ -5,109 +5,51 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import com.example.lab12.data.TrainNumberInfo
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_main2.*
-import kotlinx.android.synthetic.main.activity_main3.*
 import kotlinx.android.synthetic.main.activity_main3.back
 import kotlinx.android.synthetic.main.activity_main3.listview
 import kotlinx.android.synthetic.main.activity_main4.*
-import kotlinx.android.synthetic.main.activity_main5.*
 import okhttp3.*
 import java.io.IOException
 import java.security.SignatureException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity4 : AppCompatActivity() {
+    class TrainInfo(val name: String, val startTime: String, val arriveTime: String)
 
-    class station_shift : ArrayList<shiftItem>()
-
-    data class shiftItem(
-        val EffectiveDate: String,
-        val ExpiringDate: String,
-        val GeneralTimetable: GeneralTimetable,
-        val UpdateTime: String,
-        val VersionID: Int
-    )
-
-    data class GeneralTimetable(
-        val GeneralTrainInfo: GeneralTrainInfo,
-        val ServiceDay: ServiceDay,
-        val SrcUpdateTime: String,
-        val StopTimes: List<StopTime>
-    )
-
-    data class GeneralTrainInfo(
-        val Direction: Int,
-        val EndingStationID: String,
-        val EndingStationName: EndingStationName,
-        val Note: Note,
-        val StartingStationID: String,
-        val StartingStationName: StartingStationName,
-        val TrainNo: String
-    )
-
-    data class ServiceDay(
-        val Friday: Int,
-        val Monday: Int,
-        val Saturday: Int,
-        val Sunday: Int,
-        val Thursday: Int,
-        val Tuesday: Int,
-        val Wednesday: Int
-    )
-
-    data class StopTime(
-        val DepartureTime: String,
-        val StationID: String,
-        val StationName: StationName,
-        val StopSequence: Int
-    )
-
-    data class EndingStationName(
-        val En: String,
-        val Zh_tw: String
-    )
-
-    class Note(
-    )
-
-    data class StartingStationName(
-        val En: String,
-        val Zh_tw: String
-    )
-
-    data class StationName(
-        val En: String,
-        val Zh_tw: String
-    )
     private val APPID = "1d75f843121143c0addc39550ba48b13"
     //申請的APPKey
     private val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
-    private var shift: String= ""
-    private lateinit var station_start:String
-    private lateinit var station_end:String
-//==============================================
+    private var shift = ""
+    private lateinit var station_start: String
+    private lateinit var station_end: String
+
+    private var trainData = ArrayList<TrainInfo>()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main4)
         intent?.extras?.let {
-            shift=it.getString("shift")
-            station_start=it.getString("station_start")
-            station_end=it.getString("station_end")
+            shift = it.getString("shift")
+            station_start = it.getString("station_start")
+            station_end = it.getString("station_end")
         }
 
-    tv_start_station.text = station_start
-    tv_end_station.text = station_end
-//台鐵授權============================================================================================================
+        setListener()
+        tv_start_station.text = station_start
+        tv_end_station.text = station_end
+
+        //台鐵授權
         val intentfilter = IntentFilter("Message4")
         registerReceiver(receiver, intentfilter)
         fun getServerTime(): String {
@@ -155,32 +97,28 @@ class MainActivity4 : AppCompatActivity() {
             finish()
         }
     }
-    //廣播=============================================================================================================================
+    //廣播
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             intent.extras?.getString("json")?.let {
-                val data = Gson().fromJson(it, station_shift::class.java)
-                //listview===================================================================================
-                //items.add("0${data[0].GeneralTimetable.StopTimes[0].StopSequence}.${data[0].GeneralTimetable.StopTimes[0].StationName}\t\t\t\t\t\t\t\t\t\t\t\t\t\t${data[0].GeneralTimetable.StopTimes[0].DepartureTime}")
-                var name1= arrayOfNulls<String>(data[0].GeneralTimetable.StopTimes.size)
-                var station1= arrayOfNulls<String>(data[0].GeneralTimetable.StopTimes.size)
-                var time1= arrayOfNulls<String>(data[0].GeneralTimetable.StopTimes.size)
-                for(i in data[0].GeneralTimetable.StopTimes.indices) {
-                    if(data[0].GeneralTimetable.StopTimes[i].StopSequence<10){
-                        name1[i]="0${data[0].GeneralTimetable.StopTimes[i].StopSequence}"
-                        station1[i]="${data[0].GeneralTimetable.StopTimes[i].StationName.Zh_tw}"
-                        time1[i]="${data[0].GeneralTimetable.StopTimes[i].DepartureTime}"
-                    }
-                    else{
-                        name1[i]="${data[0].GeneralTimetable.StopTimes[i].StopSequence}"
-                        station1[i]="${data[0].GeneralTimetable.StopTimes[i].StationName.Zh_tw}"
-                        time1[i]="${data[0].GeneralTimetable.StopTimes[i].DepartureTime}"
-                    }
+                val data = Gson().fromJson(it, TrainNumberInfo::class.java)
+
+                trainData.clear()
+                data[0].GeneralTimetable.StopTimes.forEachIndexed { _, stopTime ->
+                    trainData.add(TrainInfo(stopTime.StationName.Zh_tw, stopTime.DepartureTime ?: "x", stopTime.ArrivalTime ?: "x"))
                 }
-                val myListAdapter = MyListAdapter_station_time(this@MainActivity4, name1, station1, time1, station_start , station_end)
+
+                val myListAdapter = MyListAdapter_station_time(this@MainActivity4, trainData, station_start , station_end)
                 listview.adapter = myListAdapter
             }
         }
+    }
 
+    private fun setListener() {
+        img_purchase.setOnClickListener {
+            val uri = Uri.parse("https://irs.thsrc.com.tw/IMINT/?locale=tw")
+            val it = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(it)
+        }
     }
 }
