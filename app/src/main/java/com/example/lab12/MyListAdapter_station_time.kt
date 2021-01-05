@@ -16,7 +16,7 @@ class MyListAdapter_station_time(context: Context, list: ArrayList<MainActivity4
         val tv_station: TextView = v.findViewById(R.id.tv_station)
         val tv_start_time: TextView = v.findViewById(R.id.tv_start_time)
         val tv_arrive_time: TextView = v.findViewById(R.id.tv_arrive_time)
-        val cl_all: ConstraintLayout = v.findViewById(R.id.cl_all)
+        val ll_all: LinearLayout = v.findViewById(R.id.ll_all)
     }
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
@@ -38,7 +38,7 @@ class MyListAdapter_station_time(context: Context, list: ArrayList<MainActivity4
         holder.tv_start_time.text = item.startTime
         holder.tv_arrive_time.text = item.arriveTime
 
-        if (item.name == station_start || item.name == station_end) holder.cl_all.background = context.getDrawable(R.drawable.bg_orange_all2)
+        if (item.name == station_start || item.name == station_end) holder.ll_all.background = context.getDrawable(R.drawable.bg_orange_all2)
 
         return view
     }

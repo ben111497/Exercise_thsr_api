@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.os.*
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.*
@@ -16,30 +15,29 @@ import java.security.SignatureException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import com.example.lab12.StationName as StationName1
-
-class rail : ArrayList<railwayItem>()
-data class railwayItem(
-    val OperatorID: String, //營運業者代碼
-    val StationAddress: String, //車站地址
-    val StationID: String,  //車站代碼
-    val StationName: StationName1,   //車站位置
-    val StationPosition: StationPosition,   //車站位置
-    val StationUID: String, //車站唯一識別代碼
-    val UpdateTime: String, //本平台資料更新時間
-    val VersionID: Int  //資料版本編號
-)
-data class StationName(
-    val En: String, //英文名稱
-    val Zh_tw: String   //中文繁體名稱
-)
-data class StationPosition(
-    val PositionLat: Double,   //位置緯度
-    val PositionLon: Double    //位置經度
-)
-//=====================================================================
 
 class MainActivity : BaseActivity()  {
+
+    class rail : ArrayList<railwayItem>()
+    data class railwayItem(
+        val OperatorID: String, //營運業者代碼
+        val StationAddress: String, //車站地址
+        val StationID: String,  //車站代碼
+        val StationName: StationName,   //車站位置
+        val StationPosition: StationPosition,   //車站位置
+        val StationUID: String, //車站唯一識別代碼
+        val UpdateTime: String, //本平台資料更新時間
+        val VersionID: Int  //資料版本編號
+    )
+    data class StationName(
+        val En: String, //英文名稱
+        val Zh_tw: String   //中文繁體名稱
+    )
+    data class StationPosition(
+        val PositionLat: Double,   //位置緯度
+        val PositionLon: Double    //位置經度
+    )
+
     val APPID = "1d75f843121143c0addc39550ba48b13"
     //申請的APPKey
     val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"

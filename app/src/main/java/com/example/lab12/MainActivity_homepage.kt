@@ -64,6 +64,8 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_homepage)
 
+        supportActionBar?.elevation = 0F
+
         dbrw = MyDBHelper(this).writableDatabase
         //取得資料庫實體
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
