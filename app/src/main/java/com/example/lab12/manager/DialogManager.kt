@@ -7,10 +7,12 @@ import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.AlphaAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lab12.R
 import com.example.lab12.adapter.ListDialogAdapter
+import com.example.lab12.helper.alphaAnimation
 import com.example.lab12.tools.Method
 
 class DialogManager private constructor(){
@@ -24,6 +26,27 @@ class DialogManager private constructor(){
     fun dismissAll(){
         loadingDialog?.dismiss()
         dialog?.dismiss()
+    }
+
+    fun showLoading(activity: Activity){
+        if(!activity.isDestroyed){
+            loadingDialog?.dismiss()
+
+            loadingDialog = AlertDialog.Builder(activity).create()
+            loadingDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            loadingDialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            loadingDialog?.show()
+
+            val view = View.inflate(activity, R.layout.dialog_showloading,null)
+            view.setOnClickListener { loadingDialog?.dismiss() }
+            val img_pic = view.findViewById<ImageView>(R.id.img_pic)
+            img_pic?.alphaAnimation(true, 1f, 0.3f)
+            loadingDialog?.setContentView(view)
+
+            dialog?.setOnCancelListener {
+                img_pic?.alphaAnimation(false)
+            }
+        }
     }
 
     fun showMessage(activity: Activity, message: String, flag: Boolean = false): TextView?{

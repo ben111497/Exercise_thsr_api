@@ -1,4 +1,4 @@
-package com.example.lab12.fragment
+package com.example.lab12.data
 
 data class NearRest(
     val AuthProcessTime: Int,

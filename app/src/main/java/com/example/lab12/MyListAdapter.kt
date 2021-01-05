@@ -46,7 +46,7 @@ class MyListAdapter(private val context: Activity, list: ArrayList<MainActivity5
         holder.tv_name.text = item.restName
         holder.tv_address.text = item.address
         holder.tv_distance.text = item.distance
-        holder.tv_access.text = item.access
+        holder.tv_access.text = item.access.toString()
         holder.tv_phone_number.text = item.phoneNumber
         Glide.with(context).load(item.picture).into(holder.img_picture)
 

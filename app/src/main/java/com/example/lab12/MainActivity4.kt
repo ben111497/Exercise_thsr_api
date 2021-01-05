@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lab12.data.TrainNumberInfo
+import com.example.lab12.manager.DialogManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main3.back
 import kotlinx.android.synthetic.main.activity_main3.listview
@@ -45,6 +46,7 @@ class MainActivity4 : AppCompatActivity() {
             station_end = it.getString("station_end")
         }
 
+        DialogManager.instance.showLoading(this)
         setListener()
         tv_start_station.text = station_start
         tv_end_station.text = station_end
@@ -105,11 +107,13 @@ class MainActivity4 : AppCompatActivity() {
 
                 trainData.clear()
                 data[0].GeneralTimetable.StopTimes.forEachIndexed { _, stopTime ->
-                    trainData.add(TrainInfo(stopTime.StationName.Zh_tw, stopTime.DepartureTime ?: "x", stopTime.ArrivalTime ?: "x"))
+                    trainData.add(TrainInfo(stopTime.StationName.Zh_tw, stopTime.DepartureTime ?: "終點站", stopTime.ArrivalTime ?: "起點站"))
                 }
 
                 val myListAdapter = MyListAdapter_station_time(this@MainActivity4, trainData, station_start , station_end)
                 listview.adapter = myListAdapter
+
+                DialogManager.instance.dismissAll()
             }
         }
     }

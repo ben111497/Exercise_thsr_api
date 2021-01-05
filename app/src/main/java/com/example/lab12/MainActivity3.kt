@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.core.view.get
 import com.example.lab12.adapter.StationTimeSearchAdapter
+import com.example.lab12.data.RailPlan
+import com.example.lab12.manager.DialogManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -35,6 +37,7 @@ import kotlin.collections.ArrayList
 
 class MainActivity3 : AppCompatActivity() {
     class StationInfo(val number: String, val startTime: String, val totalTime: String, val arriveTime: String)
+
     private lateinit var dbrw: SQLiteDatabase
     private var items = ArrayList<StationInfo>()
     private lateinit var adapter: StationTimeSearchAdapter
@@ -44,65 +47,6 @@ class MainActivity3 : AppCompatActivity() {
     private val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
     private lateinit var station_start: String
     private lateinit var station_end: String
-
-    class rail_plan : ArrayList<rail_planItem>()
-    data class rail_planItem(
-        val DailyTrainInfo: DailyTrainInfo,
-        val DestinationStopTime: DestinationStopTime,
-        val OriginStopTime: OriginStopTime,
-        val TrainDate: String,
-        val UpdateTime: String,
-        val VersionID: Int
-    )
-
-    data class DailyTrainInfo(
-        val Direction: Int,
-        val EndingStationID: String,
-        val EndingStationName: EndingStationName,
-        val Note: Note,
-        val StartingStationID: String,
-        val StartingStationName: StartingStationName,
-        val TrainNo: String
-    )
-
-    data class DestinationStopTime(
-        val ArrivalTime: String,
-        val DepartureTime: String,
-        val StationID: String,
-        val StationName: StationName,
-        val StopSequence: Int
-    )
-
-    data class OriginStopTime(
-        val ArrivalTime: String,
-        val DepartureTime: String,
-        val StationID: String,
-        val StationName: StationNameX,
-        val StopSequence: Int
-    )
-
-    data class EndingStationName(
-        val En: String,
-        val Zh_tw: String
-    )
-
-    class Note(
-    )
-
-    data class StartingStationName(
-        val En: String,
-        val Zh_tw: String
-    )
-
-    data class StationName(
-        val En: String,
-        val Zh_tw: String
-    )
-
-    data class StationNameX(
-        val En: String,
-        val Zh_tw: String
-    )
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,6 +59,7 @@ class MainActivity3 : AppCompatActivity() {
             end_station.setText(station_end)
         }
 
+        DialogManager.instance.showLoading(this)
         //取得資料庫實體
         dbrw = MyDBHelper(this).writableDatabase
 
@@ -140,11 +85,11 @@ class MainActivity3 : AppCompatActivity() {
             val dateFormat = SimpleDateFormat(
                 "EEE, dd MMM yyyy HH:mm:ss z", Locale.US
             )
-            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"))
+            dateFormat.timeZone = TimeZone.getTimeZone("GMT")
             return dateFormat.format(calendar.time)
         }
         //取得當下的UTC時間，Java8有提供時間格式DateTimeFormatter.RFC_1123_DATE_TIME
-        var xdate = getServerTime()
+        val xdate = getServerTime()
 
         val SignDate = "x-date: $xdate"
 
@@ -208,11 +153,11 @@ class MainActivity3 : AppCompatActivity() {
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             intent.extras?.getString("json")?.let {
-                val data = Gson().fromJson(it, rail_plan::class.java)
+                val data = Gson().fromJson(it, RailPlan::class.java)
                 //listview===================================================================================
                 items.clear()
-                var dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-                var date="0000-00-00 "
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+                val date="0000-00-00 "
                 var startTime: Date
                 var endTime: Date
                 var diff :Long
@@ -240,6 +185,8 @@ class MainActivity3 : AppCompatActivity() {
                     items.sortBy { it.startTime }
                 }
                 adapter.notifyDataSetChanged()
+
+                DialogManager.instance.dismissAll()
             }
         }
 

@@ -1,6 +1,7 @@
 package com.example.lab12
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -13,7 +14,8 @@ import android.util.Log
 import android.widget.AdapterView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.lab12.fragment.NearRest
+import com.example.lab12.data.NearRest
+import com.example.lab12.manager.DialogManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main5.*
 import okhttp3.*
@@ -21,7 +23,7 @@ import java.io.IOException
 
 class MainActivity5 : AppCompatActivity() {
     class StoreInfo(val restName: String, val address: String, val distance: String, 
-                    val access: String, val picture: String, val phoneNumber: String)
+                    val access: Double, val picture: String, val phoneNumber: String)
 
     private var storeDataList = ArrayList<StoreInfo>()
     
@@ -34,18 +36,22 @@ class MainActivity5 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main5)
+
         val intentfilter = IntentFilter("MyMessage5")
         registerReceiver(receiver, intentfilter)
         intent?.extras?.let {
             latInit = it.getDouble("lat")
             lngInt = it.getDouble("lng")
         }
+
         back.setOnClickListener {
             val bundle = Bundle()
             val intent = Intent().putExtras(bundle)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
+
+        DialogManager.instance.showLoading(this)
 
         val json = "{\"lastIndex\":-1,\"count\":15,\"type\":[7],\"lat\":${latInit},\"lng\":${lngInt},\"range\":${range}}"
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json)
@@ -82,8 +88,7 @@ class MainActivity5 : AppCompatActivity() {
                     Location.distanceBetween(content.lat, content.lng, latInit, lngInt, result) //經緯度距離計算
                     val str = String.format("%.2f",result[0]/1000)
 
-                    storeDataList.add(StoreInfo(content.name, content.vicinity, "${str}公里",
-                        "${content.priceLevel}(${content.reviewsNumber}則評論)", content.photo, content.phone))
+                    storeDataList.add(StoreInfo(content.name, content.vicinity, "${str}公里", content.rating, content.photo, content.phone))
                 }
 
                 val myListAdapter = MyListAdapter(this@MainActivity5, storeDataList)
@@ -93,6 +98,8 @@ class MainActivity5 : AppCompatActivity() {
                     val it = Intent(Intent.ACTION_VIEW, uri)
                     startActivity(it)
                 }
+
+                DialogManager.instance.dismissAll()
             }
         }
     }

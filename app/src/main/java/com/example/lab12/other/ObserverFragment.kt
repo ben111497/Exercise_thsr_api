@@ -1,7 +1,6 @@
-package com.example.lab12.fragment.other
+package com.example.lab12.other
 
 import android.os.Bundle
-import com.example.lab12.fragment.other.BaseFragment
 import com.example.lab12.manager.DataManager
 import java.util.*
 

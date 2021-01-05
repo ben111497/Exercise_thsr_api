@@ -85,9 +85,12 @@ class MainActivity_homepage : BaseActivity(), OnMapReadyCallback, OnMarkerClickL
         }
         items.addAll(originData)
         c.close()
-
-
     }
+
+    override fun onBackPressed() {
+        Method.logE("back","back")
+    }
+
     //google map
     private val REQUEST_PERMISSIONS = 1
     override fun onRequestPermissionsResult (requestCode: Int ,permissions: Array<String>, grantResults: IntArray) {

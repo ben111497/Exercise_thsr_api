@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.lab12.R
-import com.example.lab12.fragment.other.ObserverFragment
+import com.example.lab12.other.ObserverFragment
 import java.util.*
 
 class TestFragment: ObserverFragment()  {

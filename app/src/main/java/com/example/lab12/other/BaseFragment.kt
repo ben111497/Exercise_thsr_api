@@ -1,4 +1,4 @@
-package com.example.lab12.fragment.other
+package com.example.lab12.other
 
 import android.os.Bundle
 import android.view.View
@@ -7,8 +7,6 @@ import android.widget.AbsListView
 import android.widget.AbsSpinner
 import androidx.fragment.app.Fragment
 import com.example.lab12.BaseActivity
-import com.example.lab12.MainActivity
-import com.example.lab12.MainActivity_homepage
 
 abstract class BaseFragment: Fragment() {
     lateinit var mActivity: BaseActivity
