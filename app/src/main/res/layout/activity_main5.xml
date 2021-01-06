@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/orange_light"
-    tools:context=".MainActivity5">
+    tools:context=".activity.NearHotelActivity">
 
     <TextView
         android:id="@+id/textView6"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textStyle="bold"
-        android:text="附近餐廳"
+        android:text="附近旅店"
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
