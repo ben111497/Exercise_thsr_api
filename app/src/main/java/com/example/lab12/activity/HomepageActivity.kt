@@ -257,7 +257,7 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
     }
 
     private fun showListDialog() {
-        val data = arrayOf("設定成起點", "設定成終點", "附近餐廳", "取消")
+        val data = arrayOf("設定成起點", "設定成終點", "附近旅店", "取消")
         DialogManager.instance.showList(this, data)?.setOnItemClickListener { parent, view, p, id ->
                 DialogManager.instance.cancelDialog()
                 when (p) {
@@ -265,9 +265,9 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
                     1 -> originData.find { it.positionLat == x_init.toString() || it.positionLon == y_init.toString() }?.name?.let { end.text = "${it}高鐵站" }
                     2 -> {
                         val bundle2 = Bundle()
-                        val i = Intent(this, NearRestActivity::class.java)
-                        bundle2.putDouble("lat", x_init)
-                        bundle2.putDouble("lng", y_init)
+                        val i = Intent(this, NearHotelActivity::class.java)
+                        bundle2.putDouble("HotelLatList", x_init)
+                        bundle2.putDouble("HotelLngList", y_init)
                         i.putExtras(bundle2)
                         startActivityForResult(i, 3)
                     }
@@ -306,9 +306,9 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
                 }
                 R.id.rest_near -> {
                     val bundle2 = Bundle()
-                    val i = Intent(this, NearRestActivity::class.java)
-                    bundle2.putDouble("lat",x_init)
-                    bundle2.putDouble("lng",y_init)
+                    val i = Intent(this, NearHotelActivity::class.java)
+                    bundle2.putDouble("HotelLatList",x_init)
+                    bundle2.putDouble("HotelLngList",y_init)
                     i.putExtras(bundle2)  //此無資料
                     startActivityForResult(i, 3)
                 }

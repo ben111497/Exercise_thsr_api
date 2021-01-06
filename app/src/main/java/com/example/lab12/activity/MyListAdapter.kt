@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 import com.example.lab12.R
 
 
-class MyListAdapter(private val context: Activity, list: ArrayList<NearRestActivity.StoreInfo>)
-    : ArrayAdapter<NearRestActivity.StoreInfo>(context,
+class MyListAdapter(private val context: Activity, list: ArrayList<NearHotelActivity.StoreInfo>)
+    : ArrayAdapter<NearHotelActivity.StoreInfo>(context,
     R.layout.activity_near_rest, list) {
 
     private class ViewHolder(v: View) {
@@ -39,12 +39,13 @@ class MyListAdapter(private val context: Activity, list: ArrayList<NearRestActiv
         }
 
         val item = getItem(position) ?: return view
+        val star = item.star
 
         holder.tv_name.text = item.restName
         holder.tv_address.text = item.address
         holder.tv_distance.text = item.distance
         holder.tv_access.text = item.access.toString()
-        holder.tv_phone_number.text = item.phoneNumber
+        holder.tv_phone_number.text = if (star == 0) "無" else star.toString()
         Glide.with(context).load(item.picture).into(holder.img_picture)
 
         return view

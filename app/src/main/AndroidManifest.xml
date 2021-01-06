@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.LoginActivity"></activity>
-        <activity android:name=".activity.NearRestActivity"
+        <activity android:name=".activity.NearHotelActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".activity.ShiftInfoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>

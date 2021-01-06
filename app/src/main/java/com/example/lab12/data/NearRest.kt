@@ -19,21 +19,18 @@ data class Results(
 )
 
 data class Content(
-    val index: Int,
+    val type: Int,
     val lat: Double,
     val lng: Double,
     val name: String,
-    val `open`: List<String>,
-    val periods: List<Period>,
-    val phone: String,
-    val photo: String,
-    val placeID: String,
-    val priceLevel: Int,
     val rating: Double,
-    val reviews: List<Review>,
+    val vicinity:String,
+    val photo: String,
+    val url: String,
+    val star: Int,
     val reviewsNumber: Int,
-    val type: Int,
-    val vicinity: String
+    val index: Int,
+    val mode: Int
 )
 
 data class HistoryAddress(
@@ -48,27 +45,4 @@ data class LoveAddress(
     val lat: Double,
     val lng: Double,
     val placeID: String
-)
-
-data class Period(
-    val close: Close,
-    val `open`: Open
-)
-
-data class Review(
-    val name: String,
-    val photo: String,
-    val rating: Int,
-    val text: String,
-    val time: Int
-)
-
-data class Close(
-    val day: Int,
-    val time: String
-)
-
-data class Open(
-    val day: Int,
-    val time: String
 )
