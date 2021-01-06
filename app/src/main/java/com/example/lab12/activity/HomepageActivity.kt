@@ -1,6 +1,7 @@
 package com.example.lab12.activity
 
 import android.app.Activity
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
@@ -25,6 +26,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_main_homepage.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListener {
     class Station(val name: String, val address: String, val positionLat: String, val positionLon: String)
@@ -37,7 +40,10 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
     private lateinit var dbrw : SQLiteDatabase
     private var items = ArrayList<Station>()
     private var originData = ArrayList<Station>()
-    private lateinit var map:GoogleMap
+    private lateinit var map: GoogleMap
+
+    private var timeHour = 0
+    private var timeMinute = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,7 +81,8 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
             val map = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
             map.getMapAsync(this)
         }
-        setTitle("老鐵發車")
+
+        setCurrentTime()
         setListener()
 
         val c = dbrw.rawQuery( "SELECT * FROM myTable",null)
@@ -185,6 +192,14 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
             }
         }
 
+        tv_now.setOnClickListener {
+            setCurrentTime()
+        }
+
+        tv_time.setOnClickListener {
+            showTimePicker()
+        }
+
         cl_start.setOnClickListener {
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
                 val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
@@ -274,6 +289,25 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
                     3 -> DialogManager.instance.dismissAll()
                 }
             }
+    }
+
+    private fun setCurrentTime() {
+        val calendar = Calendar.getInstance()
+        timeHour = calendar.get(Calendar.HOUR_OF_DAY)
+        timeMinute = calendar.get(Calendar.MINUTE)
+        val hour = if (timeHour < 10) "0${timeHour}" else timeHour.toString()
+        val minute = if (timeMinute < 10) "0${timeMinute}" else timeMinute.toString()
+        tv_time.text = "${hour}:$minute"
+    }
+
+    private fun showTimePicker() {
+        TimePickerDialog(this, { _, hour, minute->
+            timeHour = hour
+            timeMinute = minute
+            val hour = if (timeHour < 10) "0${timeHour}" else timeHour.toString()
+            val minute = if (timeMinute < 10) "0${timeMinute}" else timeMinute.toString()
+            tv_time.text = "${hour}:$minute"
+        }, timeHour, timeMinute, true).show()
     }
 
     private fun showPopup(view: View) {

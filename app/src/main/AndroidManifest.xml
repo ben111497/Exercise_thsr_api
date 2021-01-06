@@ -21,7 +21,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".activity.ThsrInfoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".activity.HomepageActivity" />
+        <activity android:name=".activity.HomepageActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".activity.StationSearchActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
