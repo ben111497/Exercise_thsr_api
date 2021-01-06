@@ -186,6 +186,8 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
                     val i = Intent(this, ThsrInfoActivity::class.java)
                     bundle.putString("StationStart", startStation)
                     bundle.putString("StationEnd", endStation)
+                    bundle.putInt("TimeHour", timeHour)
+                    bundle.putInt("TimeMinute", timeMinute)
                     i.putExtras(bundle)
                     startActivityForResult(i, 2)
                 }
@@ -196,7 +198,7 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
             setCurrentTime()
         }
 
-        tv_time.setOnClickListener {
+        vw_clock.setOnClickListener {
             showTimePicker()
         }
 

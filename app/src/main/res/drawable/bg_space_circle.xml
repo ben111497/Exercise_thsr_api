@@ -1,0 +1,14 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners
+        android:radius="300dp"/> <!--上面左圆角的半径-->
+    <padding
+        android:left="15dp"
+        android:right="15dp"
+        android:top="10dp"
+        android:bottom="10dp"
+       />
+    <stroke
+        android:width="5dp"
+        android:color="@color/orange_primary" />
+</shape>

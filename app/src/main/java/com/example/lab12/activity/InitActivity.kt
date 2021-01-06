@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.lab12.helper.MyDBHelper
 import com.example.lab12.R
+import com.example.lab12.tools.Method
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.*
@@ -86,9 +87,7 @@ class InitActivity : BaseActivity()  {
 
         OkHttpClient().newCall(req).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                sendBroadcast(
-                    Intent("MyMessage").putExtra("json", response.body()?.string())
-                )
+                sendBroadcast(Intent("MyMessage").putExtra("json", response.body()?.string()))
                 //val data = Gson().fromJson(response.body()?.string(), rail::class.java)
             }
             override fun onFailure(call: Call, e: IOException?) {
@@ -114,18 +113,10 @@ class InitActivity : BaseActivity()  {
                         PositionLon = data[i].StationPosition.PositionLon
                         StationAddress = data[i].StationAddress
                         StationID = data[i].StationID
-                        dbrw.execSQL(
-                            "INSERT INTO myTable(StationName,PositionLat,PositionLon,StationAddress,StationID) VALUES(?,?,?,?,?)"
-                            ,
-                            arrayOf<Any?>(
-                                StationName,
-                                PositionLat,
-                                PositionLon,
-                                StationAddress,
-                                StationID
-                            )
-                        )
+                        dbrw.execSQL("INSERT INTO myTable(StationName,PositionLat,PositionLon,StationAddress,StationID) VALUES(?,?,?,?,?)"
+                            , arrayOf<Any?>(StationName, PositionLat, PositionLon, StationAddress, StationID))
                     } catch (e: Exception) {
+                        Method.logE("e","${e.message}")
                     }
                 }
                 val i = Intent(this@InitActivity, HomepageActivity::class.java)

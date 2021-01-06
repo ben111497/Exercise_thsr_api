@@ -32,6 +32,7 @@ class ThsrInfoActivity : AppCompatActivity() {
 
     private lateinit var dbrw: SQLiteDatabase
     private var items = ArrayList<StationInfo>()
+    private var itemsOrigin = ArrayList<StationInfo>()
     private lateinit var adapter: StationTimeSearchAdapter
 
     private val APPID = "1d75f843121143c0addc39550ba48b13"
@@ -39,7 +40,10 @@ class ThsrInfoActivity : AppCompatActivity() {
     private val APPKey = "CiQyJxkYO_UZY2R-0dUGNIPqoII"
     private lateinit var station_start: String
     private lateinit var station_end: String
+
     private var direction = "南下"
+    private var timeHour = 0
+    private var timeMinute = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +52,8 @@ class ThsrInfoActivity : AppCompatActivity() {
         intent?.extras?.let {
             station_start = it.getString("StationStart")
             station_end = it.getString("StationEnd")
+            timeHour = it.getInt("TimeHour")
+            timeMinute = it.getInt("TimeMinute")
             start_station.setText(station_start)
             end_station.setText(station_end)
         }
@@ -106,14 +112,14 @@ class ThsrInfoActivity : AppCompatActivity() {
         val s = dbrw.rawQuery( "SELECT * FROM myTable WHERE StationName LIKE '%${station_start}%'",null)
         val e = dbrw.rawQuery( "SELECT * FROM myTable WHERE StationName LIKE '%${station_end}%'",null)
 
-        val OriginStationID:String
-        val DestinationStationID:String
+        var originStationID = ""
+        var destinationStationID = ""
         s.moveToFirst()
-        OriginStationID=s.getString(4)
+        originStationID = s.getString(4)
         e.moveToFirst()
-        DestinationStationID=e.getString(4)
+        destinationStationID = e.getString(4)
 
-        val APIUrl = "http://ptx.transportdata.tw/MOTC/v2/Rail/THSR/DailyTimetable/OD/${OriginStationID}/to/${DestinationStationID}/${currentday}?\$format=JSON"
+        val APIUrl = "http://ptx.transportdata.tw/MOTC/v2/Rail/THSR/DailyTimetable/OD/${originStationID}/to/${destinationStationID}/${currentday}?\$format=JSON"
         val req = Request.Builder()
             .header("Authorization", sAuth)
             .header("x-date", xdate)
@@ -135,10 +141,7 @@ class ThsrInfoActivity : AppCompatActivity() {
             }
         })
 
-        back.setOnClickListener {
-            setResult(Activity.RESULT_OK, Intent())
-            finish()
-        }
+        setListener()
     }
 
     //廣播=============================================================================================================================
@@ -148,6 +151,7 @@ class ThsrInfoActivity : AppCompatActivity() {
                 val data = Gson().fromJson(it, RailPlan::class.java)
                 //listview===================================================================================
                 items.clear()
+                itemsOrigin.clear()
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
                 val date="0000-00-00 "
                 var startTime: Date
@@ -170,28 +174,18 @@ class ThsrInfoActivity : AppCompatActivity() {
                     hours = (diff - days * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
                     minutes = (diff - days * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60)
                     if (hours > 0.0)
-                        items.add(
-                            StationInfo(
-                                data[i].DailyTrainInfo.TrainNo,
-                                arrive_time,
-                                "${hours}時${minutes}分",
-                                leave_time,
-                                direction
-                            )
-                        )
+                        itemsOrigin.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${hours}時${minutes}分", leave_time, direction))
                     else
-                        items.add(
-                            StationInfo(
-                                data[i].DailyTrainInfo.TrainNo,
-                                arrive_time,
-                                "${minutes}分",
-                                leave_time,
-                                direction
-                            )
-                        )
+                        itemsOrigin.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${minutes}分", leave_time, direction))
 
-                    items.sortBy { it.startTime }
+                    itemsOrigin.sortBy { it.startTime }
                 }
+
+                items.addAll(itemsOrigin.filter {
+                    (it.startTime.split(":")[0].toInt() > timeHour) ||
+                            (it.startTime.split(":")[0].toInt() == timeHour &&
+                                    it.startTime.split(":")[1].toInt() >= timeMinute) })
+
                 adapter.notifyDataSetChanged()
 
                 DialogManager.instance.dismissAll()
@@ -199,6 +193,7 @@ class ThsrInfoActivity : AppCompatActivity() {
         }
 
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         data?.extras?.let {
@@ -206,5 +201,32 @@ class ThsrInfoActivity : AppCompatActivity() {
                 //畫面2回傳
             }
         }
+    }
+
+    private fun setListener() {
+        tv_change.setOnClickListener {
+            setInfoMode()
+        }
+
+        back.setOnClickListener {
+            setResult(Activity.RESULT_OK, Intent())
+            finish()
+        }
+    }
+
+    private fun setInfoMode() {
+        if (items.size < itemsOrigin.size) {
+            tv_change.text = "All"
+            items.clear()
+            items.addAll(itemsOrigin)
+        } else {
+            tv_change.text = "Now"
+            items.clear()
+            items.addAll(itemsOrigin.filter {
+                (it.startTime.split(":")[0].toInt() > timeHour) ||
+                        (it.startTime.split(":")[0].toInt() == timeHour &&
+                                it.startTime.split(":")[1].toInt() >= timeMinute) })
+        }
+        adapter.notifyDataSetChanged()
     }
 }
