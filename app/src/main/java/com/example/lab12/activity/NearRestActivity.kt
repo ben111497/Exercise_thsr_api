@@ -1,4 +1,4 @@
-package com.example.lab12
+package com.example.lab12.activity
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -13,6 +13,7 @@ import android.util.Log
 import android.widget.AdapterView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lab12.R
 import com.example.lab12.data.NearRest
 import com.example.lab12.manager.DialogManager
 import com.google.gson.Gson
@@ -87,10 +88,22 @@ class NearRestActivity : AppCompatActivity() {
                     Location.distanceBetween(content.lat, content.lng, latInit, lngInt, result) //經緯度距離計算
                     val str = String.format("%.2f",result[0]/1000)
 
-                    storeDataList.add(StoreInfo(content.name, content.vicinity, "${str}公里", content.rating, content.photo, content.phone))
+                    storeDataList.add(
+                        StoreInfo(
+                            content.name,
+                            content.vicinity,
+                            "${str}公里",
+                            content.rating,
+                            content.photo,
+                            content.phone
+                        )
+                    )
                 }
 
-                val myListAdapter = MyListAdapter(this@NearRestActivity, storeDataList)
+                val myListAdapter = MyListAdapter(
+                    this@NearRestActivity,
+                    storeDataList
+                )
                 listview.adapter = myListAdapter
                 listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                     val uri = Uri.parse("http://maps.google.com/maps?f=d&saddr=${latInit}%20${lngInt}&daddr=${lat[position]}%20${lng[position]}&hl=en")

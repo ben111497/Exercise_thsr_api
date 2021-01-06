@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.example.lab12.ThsrInfoActivity
+import com.example.lab12.activity.ThsrInfoActivity
 import com.example.lab12.R
 
 class StationTimeSearchAdapter(context: Context, list: ArrayList<ThsrInfoActivity.StationInfo>):

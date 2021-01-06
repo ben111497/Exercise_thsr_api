@@ -1,4 +1,4 @@
-package com.example.lab12
+package com.example.lab12.activity
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager
@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import java.util.*
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.lab12.R
 import com.example.lab12.manager.DataManager
 import com.example.lab12.manager.DialogManager
 

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.AbsSpinner
 import androidx.fragment.app.Fragment
-import com.example.lab12.BaseActivity
+import com.example.lab12.activity.BaseActivity
 
 abstract class BaseFragment: Fragment() {
     lateinit var mActivity: BaseActivity

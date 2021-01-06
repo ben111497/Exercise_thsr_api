@@ -8,21 +8,21 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/thsr_loading"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/thsr_loading"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".NearRestActivity"
+        <activity android:name=".activity.LoginActivity"></activity>
+        <activity android:name=".activity.NearRestActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".ShiftInfoActivity"
+        <activity android:name=".activity.ShiftInfoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".ThsrInfoActivity"
+        <activity android:name=".activity.ThsrInfoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".HomepageActivity" />
-        <activity android:name=".StationSearchActivity"
+        <activity android:name=".activity.HomepageActivity" />
+        <activity android:name=".activity.StationSearchActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <uses-library
@@ -33,7 +33,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAsgMnGw89Q8NRiaC9zTpVCq0Fu9Ga-dPU" />
 
-        <activity android:name=".InitActivity"
+        <activity android:name=".activity.InitActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

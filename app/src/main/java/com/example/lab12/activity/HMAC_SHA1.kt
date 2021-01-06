@@ -1,4 +1,4 @@
-package com.example.lab12
+package com.example.lab12.activity
 
 import android.os.Build
 import androidx.annotation.RequiresApi

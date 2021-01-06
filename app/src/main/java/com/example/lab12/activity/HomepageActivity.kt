@@ -1,4 +1,4 @@
-package com.example.lab12
+package com.example.lab12.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -13,8 +13,10 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.example.lab12.R
 import com.example.lab12.adapter.StationSearchAdapter
 import com.example.lab12.fragment.TestFragment
+import com.example.lab12.helper.MyDBHelper
 import com.example.lab12.manager.DialogManager
 import com.example.lab12.tools.Method
 import com.google.android.gms.maps.*
@@ -80,7 +82,13 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
         c.moveToFirst()
         items.clear()
         for(i in 0 until c.count){
-            originData.add(Station(c.getString(0), c.getString(3), c.getString(1), c.getString(2)))
+            originData.add(
+                Station(
+                    c.getString(
+                        0
+                    ), c.getString(3), c.getString(1), c.getString(2)
+                )
+            )
             c.moveToNext()
         }
         items.addAll(originData)
@@ -159,8 +167,8 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
         }
         //時刻表規劃路線規劃
         station_plan.setOnClickListener{
-            val startStation = start.text.toString().replace("車站", "")
-            val endStation = end.text.toString().replace("車站", "")
+            val startStation = start.text.toString().replace("高鐵站", "")
+            val endStation = end.text.toString().replace("高鐵站", "")
             if (startStation.isEmpty() || endStation.isEmpty())
                 Toast.makeText(this, "起始站點或終點站點未輸入!", Toast.LENGTH_SHORT).show()
             else {
@@ -181,9 +189,10 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
             DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
                 val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
                 val listView = it.findViewById<ListView>(R.id.listView)
+
                 adapterStation = StationSearchAdapter(this, items, object: StationSearchAdapter.MsgListener {
                     override fun onClick(position: Int) {
-                        start.text = "${items[position].name}車站"
+                        start.text = "${items[position].name}高鐵站"
                         DialogManager.instance.cancelDialog()
                     }
                 })
@@ -211,13 +220,14 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
             }
         }
 
-        cl_end.setOnClickListener {
-            DialogManager.instance.showCustom(this, R.layout.dialog_stationlist, true)?.let {
+        cl_end.setOnClickListener { DialogManager.instance.showCustom(this,
+                R.layout.dialog_stationlist, true)?.let {
                 val ed_stationName = it.findViewById<EditText>(R.id.ed_stationName)
                 val listView = it.findViewById<ListView>(R.id.listView)
+
                 adapterStation2 = StationSearchAdapter(this, items, object: StationSearchAdapter.MsgListener{
                 override fun onClick(position: Int) {
-                    end.text = "${items[position].name}車站"
+                    end.text = "${items[position].name}高鐵站"
                     DialogManager.instance.cancelDialog()
                 }
             })
@@ -248,12 +258,11 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
 
     private fun showListDialog() {
         val data = arrayOf("設定成起點", "設定成終點", "附近餐廳", "取消")
-        DialogManager.instance.showList(this, data)
-            ?.setOnItemClickListener { parent, view, p, id ->
+        DialogManager.instance.showList(this, data)?.setOnItemClickListener { parent, view, p, id ->
                 DialogManager.instance.cancelDialog()
                 when (p) {
-                    0 -> originData.find { it.positionLat == x_init.toString() || it.positionLon == y_init.toString() }?.name?.let { start.text = "${it}車站" }
-                    1 -> originData.find { it.positionLat == x_init.toString() || it.positionLon == y_init.toString() }?.name?.let { end.text = "${it}車站" }
+                    0 -> originData.find { it.positionLat == x_init.toString() || it.positionLon == y_init.toString() }?.name?.let { start.text = "${it}高鐵站" }
+                    1 -> originData.find { it.positionLat == x_init.toString() || it.positionLon == y_init.toString() }?.name?.let { end.text = "${it}高鐵站" }
                     2 -> {
                         val bundle2 = Bundle()
                         val i = Intent(this, NearRestActivity::class.java)

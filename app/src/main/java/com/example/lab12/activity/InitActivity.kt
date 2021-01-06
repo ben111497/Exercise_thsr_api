@@ -1,4 +1,4 @@
-package com.example.lab12
+package com.example.lab12.activity
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.os.*
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.example.lab12.helper.MyDBHelper
+import com.example.lab12.R
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.*

@@ -1,4 +1,4 @@
-package com.example.lab12
+package com.example.lab12.activity
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -12,8 +12,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.AdapterView
 import androidx.annotation.RequiresApi
+import com.example.lab12.R
 import com.example.lab12.adapter.StationTimeSearchAdapter
 import com.example.lab12.data.RailPlan
+import com.example.lab12.helper.MyDBHelper
 import com.example.lab12.manager.DialogManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main2.listview
@@ -168,9 +170,25 @@ class ThsrInfoActivity : AppCompatActivity() {
                     hours = (diff - days * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
                     minutes = (diff - days * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60)
                     if (hours > 0.0)
-                        items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${hours}時${minutes}分", leave_time, direction))
+                        items.add(
+                            StationInfo(
+                                data[i].DailyTrainInfo.TrainNo,
+                                arrive_time,
+                                "${hours}時${minutes}分",
+                                leave_time,
+                                direction
+                            )
+                        )
                     else
-                        items.add(StationInfo(data[i].DailyTrainInfo.TrainNo, arrive_time, "${minutes}分", leave_time, direction))
+                        items.add(
+                            StationInfo(
+                                data[i].DailyTrainInfo.TrainNo,
+                                arrive_time,
+                                "${minutes}分",
+                                leave_time,
+                                direction
+                            )
+                        )
 
                     items.sortBy { it.startTime }
                 }

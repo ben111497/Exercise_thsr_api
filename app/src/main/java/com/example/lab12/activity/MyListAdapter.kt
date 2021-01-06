@@ -1,4 +1,4 @@
-package com.example.lab12
+package com.example.lab12.activity
 
 
 import android.app.Activity
@@ -8,10 +8,12 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.example.lab12.R
 
 
 class MyListAdapter(private val context: Activity, list: ArrayList<NearRestActivity.StoreInfo>)
-    : ArrayAdapter<NearRestActivity.StoreInfo>(context, R.layout.activity_near_rest, list) {
+    : ArrayAdapter<NearRestActivity.StoreInfo>(context,
+    R.layout.activity_near_rest, list) {
 
     private class ViewHolder(v: View) {
         val tv_name: TextView = v.findViewById(R.id.tv_name)
@@ -27,7 +29,8 @@ class MyListAdapter(private val context: Activity, list: ArrayList<NearRestActiv
         val holder: ViewHolder
 
         if(convertView == null){
-            view = View.inflate(context, R.layout.activity_near_rest, null)
+            view = View.inflate(context,
+                R.layout.activity_near_rest, null)
             holder = ViewHolder(view)
             view.tag = holder
         } else {

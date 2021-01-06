@@ -1,13 +1,16 @@
-package com.example.lab12
+package com.example.lab12.adapter
 
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.lab12.R
+import com.example.lab12.activity.ShiftInfoActivity
 
-class MyListAdapter_station_time(context: Context, list: ArrayList<ShiftInfoActivity.TrainInfo>,
-                                 private val station_start: String, private val station_end: String)
-    : ArrayAdapter<ShiftInfoActivity.TrainInfo>(context, R.layout.custom_list_station_time, list) {
+class StationTimeAdapter(context: Context, list: ArrayList<ShiftInfoActivity.TrainInfo>,
+                         private val station_start: String, private val station_end: String)
+    : ArrayAdapter<ShiftInfoActivity.TrainInfo>(context,
+    R.layout.custom_list_station_time, list) {
 
     private class ViewHolder(v: View) {
         val tv_station: TextView = v.findViewById(R.id.tv_station)
@@ -21,8 +24,10 @@ class MyListAdapter_station_time(context: Context, list: ArrayList<ShiftInfoActi
         val holder: ViewHolder
 
         if(convertView == null){
-            view = View.inflate(context, R.layout.custom_list_station_time, null)
-            holder = ViewHolder(view)
+            view = View.inflate(context,
+                R.layout.custom_list_station_time, null)
+            holder =
+                ViewHolder(view)
             view.tag = holder
         } else {
             holder = convertView.tag as ViewHolder
@@ -35,7 +40,9 @@ class MyListAdapter_station_time(context: Context, list: ArrayList<ShiftInfoActi
         holder.tv_start_time.text = item.startTime
         holder.tv_arrive_time.text = item.arriveTime
 
-        if (item.name == station_start || item.name == station_end) holder.ll_all.background = context.getDrawable(R.drawable.bg_orange_all2)
+        if (item.name == station_start || item.name == station_end) holder.ll_all.background = context.getDrawable(
+            R.drawable.bg_orange_all2
+        )
 
         return view
     }

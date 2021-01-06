@@ -1,4 +1,4 @@
-package com.example.lab12
+package com.example.lab12.activity
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lab12.R
+import com.example.lab12.adapter.StationTimeAdapter
 import com.example.lab12.data.TrainNumberInfo
 import com.example.lab12.manager.DialogManager
 import com.google.gson.Gson
@@ -108,10 +110,21 @@ class ShiftInfoActivity : AppCompatActivity() {
 
                 trainData.clear()
                 data[0].GeneralTimetable.StopTimes.forEachIndexed { _, stopTime ->
-                    trainData.add(TrainInfo(stopTime.StationName.Zh_tw, stopTime.DepartureTime ?: "終點站", stopTime.ArrivalTime ?: "起點站"))
+                    trainData.add(
+                        TrainInfo(
+                            stopTime.StationName.Zh_tw,
+                            stopTime.DepartureTime ?: "終點站",
+                            stopTime.ArrivalTime ?: "起點站"
+                        )
+                    )
                 }
 
-                val myListAdapter = MyListAdapter_station_time(this@ShiftInfoActivity, trainData, station_start , station_end)
+                val myListAdapter = StationTimeAdapter(
+                    this@ShiftInfoActivity,
+                    trainData,
+                    station_start,
+                    station_end
+                )
                 listview.adapter = myListAdapter
 
                 DialogManager.instance.dismissAll()
