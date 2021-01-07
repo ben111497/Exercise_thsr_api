@@ -149,6 +149,7 @@
 
             <View
                 android:id="@+id/vw_clock"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
@@ -184,6 +185,7 @@
 
             <TextView
                 android:id="@+id/tv_history"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -213,6 +215,7 @@
 
             <TextView
                 android:id="@+id/tv_now"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -233,6 +236,7 @@
             android:layout_height="0dp"
             android:layout_marginEnd="16dp"
             android:rotation="90"
+            style="@style/RippleButton"
             app:layout_constraintBottom_toBottomOf="@+id/cl_end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/cl_start"
@@ -240,6 +244,7 @@
 
         <TextView
             android:id="@+id/station_search"
+            android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -259,6 +264,7 @@
 
         <TextView
             android:id="@+id/station_plan"
+            android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

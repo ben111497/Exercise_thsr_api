@@ -382,6 +382,7 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
                 historyData.add(HistoryData(dataHistory.getString(1), dataHistory.getString(2)))
                 dataHistory.moveToNext()
             }
+            historyData.reverse()
         } catch (e: Exception) {
             Method.logE("error","${e.message}")
         }
@@ -389,7 +390,7 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
 
     private fun addHistoryData() {
         try {
-            historyData.add(HistoryData(start.text.toString(), end.text.toString()))
+            historyData.add(0, HistoryData(start.text.toString(), end.text.toString()))
             dbrwHistory = History(this).writableDatabase
             dbrwHistory.execSQL("INSERT INTO myTable(Id, StartStationName, EndStationName) VALUES(?,?,?)",
                 arrayOf<Any?>("${start.text}${end.text}", start.text.toString(), end.text.toString()))
