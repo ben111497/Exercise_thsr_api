@@ -46,7 +46,9 @@ class MyListAdapter(private val context: Activity, list: ArrayList<NearHotelActi
         holder.tv_distance.text = item.distance
         holder.tv_access.text = item.access.toString()
         holder.tv_phone_number.text = if (star == 0) "無" else star.toString()
-        Glide.with(context).load(item.picture).into(holder.img_picture)
+        Glide.with(context).load(item.picture)
+            .error(R.drawable.no_image)
+            .into(holder.img_picture)
 
         return view
     }
