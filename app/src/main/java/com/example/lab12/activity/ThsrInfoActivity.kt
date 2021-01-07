@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.lab12.R
 import com.example.lab12.adapter.StationTimeSearchAdapter
@@ -44,6 +45,7 @@ class ThsrInfoActivity : AppCompatActivity() {
     private var direction = "南下"
     private var timeHour = 0
     private var timeMinute = 0
+    private var isAll = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -186,6 +188,11 @@ class ThsrInfoActivity : AppCompatActivity() {
                             (it.startTime.split(":")[0].toInt() == timeHour &&
                                     it.startTime.split(":")[1].toInt() >= timeMinute) })
 
+                if (items.size == itemsOrigin.size) {
+                    tv_change.text = "All"
+                    isAll = true
+                }
+
                 adapter.notifyDataSetChanged()
 
                 DialogManager.instance.dismissAll()
@@ -215,17 +222,23 @@ class ThsrInfoActivity : AppCompatActivity() {
     }
 
     private fun setInfoMode() {
-        if (items.size < itemsOrigin.size) {
-            tv_change.text = "All"
-            items.clear()
-            items.addAll(itemsOrigin)
-        } else {
-            tv_change.text = "Now"
-            items.clear()
-            items.addAll(itemsOrigin.filter {
-                (it.startTime.split(":")[0].toInt() > timeHour) ||
-                        (it.startTime.split(":")[0].toInt() == timeHour &&
-                                it.startTime.split(":")[1].toInt() >= timeMinute) })
+        when {
+            isAll -> {
+                Toast.makeText(this, "當前時間包含所有班次", Toast.LENGTH_SHORT).show()
+            }
+            items.size < itemsOrigin.size -> {
+                tv_change.text = "All"
+                items.clear()
+                items.addAll(itemsOrigin)
+            }
+            else -> {
+                tv_change.text = "Now"
+                items.clear()
+                items.addAll(itemsOrigin.filter {
+                    (it.startTime.split(":")[0].toInt() > timeHour) ||
+                            (it.startTime.split(":")[0].toInt() == timeHour &&
+                                    it.startTime.split(":")[1].toInt() >= timeMinute) })
+            }
         }
         adapter.notifyDataSetChanged()
     }

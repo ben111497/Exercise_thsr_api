@@ -24,16 +24,13 @@ import okhttp3.*
 import java.io.IOException
 
 class NearHotelActivity : AppCompatActivity() {
-    class StoreInfo(val restName: String, val address: String, val distance: String, 
-                    val access: Double, val picture: String, val star: Int)
+    class StoreInfo(val restName: String, val address: String, val distance: String, val access: Double,
+                    val picture: String, val star: Int, val lat: Double, val lng: Double, val url: String)
 
     private var storeDataList = ArrayList<StoreInfo>()
     
     private var latInit: Double = 25.04
     private var lngInt: Double = 121.5
-    private val hotelLatList = ArrayList<Double>()
-    private val hotelLngList = ArrayList<Double>()
-    private val hotelUrlList = ArrayList<String>()
 
     private val APIUrl = "https://api.bluenet-ride.com/v2_0/lineBot/hotel/get"
     @RequiresApi(Build.VERSION_CODES.O)
@@ -60,7 +57,7 @@ class NearHotelActivity : AppCompatActivity() {
         Method.logE("latInit", "$latInit")
         Method.logE("lngInt", "$lngInt")
 
-        val json = "{\"lastIndex\":-1,\"type\":[7],\"count\":15,\"lat\": ${latInit},\"lng\": ${lngInt},\"range\":\"5000\",\"mode\":0}"
+        val json = "{\"lastIndex\":-1,\"type\":[7],\"count\":20,\"lat\": ${latInit},\"lng\": ${lngInt},\"range\":\"10000\",\"mode\":0}"
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json)
 
         val req = Request.Builder()
@@ -86,24 +83,19 @@ class NearHotelActivity : AppCompatActivity() {
                 val data = Gson().fromJson(it, NearRest::class.java)
 
                 storeDataList.clear()
-                hotelUrlList.clear()
-                
                 data.results.content.forEachIndexed { index, content ->
                     val result = FloatArray(1)
-                    hotelLatList.add(content.lat)
-                    hotelLngList.add(content.lng)
-                    hotelUrlList.add(content.url)
                     Location.distanceBetween(content.lat, content.lng, latInit, lngInt, result) //經緯度距離計算
                     val str = String.format("%.2f",result[0]/1000)
 
                     if (content.url.isNotEmpty() && content.name.isNotEmpty())
-                        storeDataList.add(StoreInfo(content.name, content.vicinity, "${str}公里", content.rating, content.photo, content.star))
+                        storeDataList.add(StoreInfo(content.name, content.vicinity, "${str}公里", content.rating,
+                            content.photo, content.star, content.lat, content.lng, content.url))
                 }
 
-                val myListAdapter = MyListAdapter(
-                    this@NearHotelActivity,
-                    storeDataList
-                )
+                storeDataList.sortBy { it.distance.replace("公里", "").toDouble() }
+
+                val myListAdapter = MyListAdapter(this@NearHotelActivity, storeDataList)
 
                 listview.adapter = myListAdapter
                 listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -121,14 +113,14 @@ class NearHotelActivity : AppCompatActivity() {
             val ll_google = it.findViewById<LinearLayout>(R.id.ll_google)
 
             ll_google.setOnClickListener {
-                val uri = Uri.parse("http://maps.google.com/maps?f=d&saddr=${latInit}%20${lngInt}&daddr=${hotelLatList[position]}%20${hotelLngList[position]}&hl=en")
+                val uri = Uri.parse("http://maps.google.com/maps?f=d&saddr=${latInit}%20${lngInt}&daddr=${storeDataList[position].lat}%20${storeDataList[position].lng}&hl=en")
                 val it = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(it)
                 DialogManager.instance.dismissAll()
             }
 
             ll_hotel.setOnClickListener {
-                val uri = Uri.parse(hotelUrlList[position])
+                val uri = Uri.parse(storeDataList[position].url)
                 val it = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(it)
                 DialogManager.instance.dismissAll()

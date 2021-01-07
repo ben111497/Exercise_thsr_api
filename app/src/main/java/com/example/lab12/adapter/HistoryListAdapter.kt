@@ -39,12 +39,15 @@ class HistoryListAdapter(context: Context, list: ArrayList<HomepageActivity.Hist
 
         val item =  getItem(position) ?: return view
 
+        holder.cl_all.background = context.getDrawable(if (position % 2 == 0) R.drawable.bg_blue_green else R.drawable.bg_white3)
+
         holder.tv_start.text = item.startStation
         holder.tv_end.text = item.endStation
 
         holder.cl_all.setOnClickListener {
             listener.onClick(position)
         }
+
         holder.img_cancel.setOnClickListener {
             listener.onCancel(position)
         }
