@@ -60,7 +60,7 @@ class NearHotelActivity : AppCompatActivity() {
         Method.logE("latInit", "$latInit")
         Method.logE("lngInt", "$lngInt")
 
-        val json = "{\"lastIndex\":-1,\"type\":[7],\"count\":15,\"lat\": ${latInit},\"lng\": ${lngInt},\"range\":\"5000\",\"mode\":0}"
+        val json = "{\"lastIndex\":-1,\"type\":[7],\"count\":15,\"lat\": ${latInit},\"lng\": ${lngInt},\"range\":\"10000\",\"mode\":0}"
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json)
 
         val req = Request.Builder()
@@ -100,10 +100,9 @@ class NearHotelActivity : AppCompatActivity() {
                         storeDataList.add(StoreInfo(content.name, content.vicinity, "${str}公里", content.rating, content.photo, content.star))
                 }
 
-                val myListAdapter = MyListAdapter(
-                    this@NearHotelActivity,
-                    storeDataList
-                )
+                storeDataList.sortBy { it.distance.replace("公里", "").toDouble() }
+
+                val myListAdapter = MyListAdapter(this@NearHotelActivity, storeDataList)
 
                 listview.adapter = myListAdapter
                 listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
