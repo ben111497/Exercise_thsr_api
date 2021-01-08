@@ -390,10 +390,12 @@ class HomepageActivity : BaseActivity(), OnMapReadyCallback, OnMarkerClickListen
 
     private fun addHistoryData() {
         try {
-            historyData.add(0, HistoryData(start.text.toString(), end.text.toString()))
-            dbrwHistory = History(this).writableDatabase
-            dbrwHistory.execSQL("INSERT INTO myTable(Id, StartStationName, EndStationName) VALUES(?,?,?)",
-                arrayOf<Any?>("${start.text}${end.text}", start.text.toString(), end.text.toString()))
+            if (historyData.none { it.startStation == start.text.toString() && it.endStation == end.text.toString()}) {
+                historyData.add(0, HistoryData(start.text.toString(), end.text.toString()))
+                dbrwHistory = History(this).writableDatabase
+                dbrwHistory.execSQL("INSERT INTO myTable(Id, StartStationName, EndStationName) VALUES(?,?,?)",
+                    arrayOf<Any?>("${start.text}${end.text}", start.text.toString(), end.text.toString()))
+            }
         } catch (e: Exception) {
             Method.logE("error2","${e.message}")
         }
